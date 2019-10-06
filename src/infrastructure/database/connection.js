@@ -4,7 +4,9 @@ const url = `${process.env.DATABASE_URL}/${process.env.DATABASE_NAME}`;
 
 const options = {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: true
 };
 
 const connect = () => {

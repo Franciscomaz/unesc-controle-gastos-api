@@ -1,6 +1,9 @@
 {
   /* See all the pre-defined configs here: https://www.npmjs.com/package/eslint-config-defaults */
   "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaVersion": 11
+  },
   "env": {
     "node": true,
     "es6": true,
@@ -13,9 +16,9 @@
     "no-debugger": 1,
     "no-extra-semi": 1,
     "no-extra-parens": 1,
-    "no-irregular-whitespace": 0,
-    "no-undef": 0,
-    "no-unused-vars": 0,
+    "no-irregular-whitespace": 1,
+    "no-undef": 1,
+    "no-unused-vars": 1,
     "semi": 1,
     "semi-spacing": 1,
     "quotes": [2, "single", { "avoidEscape": true }]
