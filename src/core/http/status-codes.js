@@ -1,0 +1,8 @@
+const HTTP_CODES = {
+  OK: 200,
+  NOT_FOUND: 404,
+  VALIDATION_ERROR: 422,
+  INTERNAL_ERROR: 500
+};
+
+module.exports = HTTP_CODES;

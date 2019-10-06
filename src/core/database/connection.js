@@ -10,16 +10,13 @@ const options = {
 };
 
 const connect = () => {
-  mongoose.connect(url, options);
+  mongoose
+    .connect(url, options)
+    .then(() =>
+      console.log('Conectado com sucesso no banco:', process.env.DATABASE_NAME)
+    )
+    .catch(err => console.log('Erro na conexão com o banco de dados:', err));
 };
-
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () =>
-  console.log(
-    `Mongodb conectado com sucesso no banco ${process.env.DATABASE_NAME}`
-  )
-);
 
 module.exports = {
   connect: connect

@@ -6,8 +6,7 @@
   },
   "env": {
     "node": true,
-    "es6": true,
-    "worker": true
+    "es6": true
   },
   "rules": {
     "eqeqeq": 2,
@@ -15,7 +14,6 @@
     "no-console": 0,
     "no-debugger": 1,
     "no-extra-semi": 1,
-    "no-extra-parens": 1,
     "no-irregular-whitespace": 1,
     "no-undef": 1,
     "no-unused-vars": 1,

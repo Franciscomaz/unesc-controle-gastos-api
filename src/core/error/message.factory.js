@@ -1,9 +1,4 @@
-const HTTP_CODES = {
-  OK: 200,
-  NOT_FOUND: 404,
-  VALIDATION_ERROR: 422,
-  INTERNAL_ERROR: 500
-};
+const HTTP_CODES = require('../http/status-codes');
 
 const createErrorResponse = (...errors) => {
   return {
@@ -20,8 +15,6 @@ const createGenericErrorMessage = (title, detail, status) => {
 };
 
 module.exports = {
-  HTTP_CODES: HTTP_CODES,
-
   internalErrorMessage: detail => {
     return createErrorResponse(
       createGenericErrorMessage(
@@ -40,15 +33,15 @@ module.exports = {
       )
     );
   },
-  validationErrorMessage: validationError => {
-    const errors = validationError.details.map(error =>
+  validationErrorMessage: (...details) => {
+    const errors = details.map(detail =>
       createGenericErrorMessage(
-        'Atributo inválido',
-        error.message,
+        'Erro de validação',
+        detail,
         HTTP_CODES.VALIDATION_ERROR
       )
     );
 
-    return createErrorResponse(...errors);
+    return createErrorResponse(errors);
   }
 };
