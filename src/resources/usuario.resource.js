@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const service = require('../services/lancamento.service');
+const service = require('../services/usuario.service');
 
 const toRepresentation = (...entities) => {
   if (!entities.length) {
@@ -10,7 +10,7 @@ const toRepresentation = (...entities) => {
     return {
       id: entity.id,
       nome: entity.nome,
-      valor: entity.valor
+      username: entity.username
     };
   };
 
