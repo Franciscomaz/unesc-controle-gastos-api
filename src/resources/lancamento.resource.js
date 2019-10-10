@@ -19,7 +19,8 @@ const toRepresentation = (...entities) => {
 
 router.get('', async function(req, res, next) {
   try {
-    res.send(toRepresentation(...(await service.findAll())));
+    const entities = await service.findAll();
+    res.send(toRepresentation(...entities));
   } catch (err) {
     next(err);
   }
