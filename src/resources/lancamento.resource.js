@@ -12,7 +12,7 @@ const toRepresentation = entity => {
 
 router.get('', authenticate(), async function(req, res, next) {
   try {
-    const entities = await service.findAll();
+    const entities = await service.findAll({ usuario: req.user.id });
     res.send(entities.map(entity => toRepresentation(entity)));
   } catch (err) {
     next(err);
@@ -29,7 +29,13 @@ router.get('/:id', authenticate(), async function(req, res, next) {
 
 router.post('', authenticate(), async function(req, res, next) {
   try {
-    res.send(toRepresentation(await service.create(req.body)));
+    const payload = {
+      nome: req.body.nome,
+      valor: req.body.valor,
+      usuario: req.user.id
+    };
+
+    res.send(toRepresentation(await service.create(payload)));
   } catch (err) {
     next(err);
   }
