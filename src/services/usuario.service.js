@@ -1,28 +1,39 @@
-const ERROR_TYPES = require('../core/error/types');
+const EXCEPTION_TYPES = require('../core/exception/types');
 
-const { pbkdf2 } = require('crypto');
+const {
+  encrypt,
+  isValidPassword
+} = require('../core/authentication/crypto.service');
 
-const ObjectId = require('mongoose').Types.ObjectId;
 const Usuario = require('../models/usuario');
+const ObjectIdWrapper = require('../core/database/object-id.wrapper');
 
 const findAll = async () => {
   return await Usuario.find();
 };
 
 const findById = async objectId => {
-  if (!ObjectId.isValid(objectId)) {
-    throw {
-      message: `Formato do id inválido: ${objectId}`,
-      type: ERROR_TYPES.VALIDATION
-    };
-  }
+  const objectIdWrapper = new ObjectIdWrapper(objectId);
 
-  const entity = await Usuario.findById(objectId);
+  const entity = await Usuario.findById(objectIdWrapper.get());
 
   if (!entity) {
     throw {
-      type: ERROR_TYPES.NOT_FOUND,
-      message: `Lançamento não encontrado para o id: ${objectId}`
+      type: EXCEPTION_TYPES.NOT_FOUND,
+      message: `Usuário não encontrado para o id: ${objectIdWrapper.get()}`
+    };
+  }
+
+  return entity;
+};
+
+const findByName = async username => {
+  const entity = await Usuario.findOne({ username: username });
+
+  if (!entity) {
+    throw {
+      type: EXCEPTION_TYPES.NOT_FOUND,
+      message: `Usuário ${username} não encontrado`
     };
   }
 
@@ -30,14 +41,7 @@ const findById = async objectId => {
 };
 
 const create = async representation => {
-  console.log('ok');
-
-  const hashedPassord = await pbkdf2(
-    representation.senha,
-    process.env.PASSWORD_SALT
-  );
-
-  console.log(hashedPassord);
+  const hashedPassord = encrypt(representation.senha);
 
   const entity = new Usuario({
     nome: representation.nome,
@@ -45,11 +49,25 @@ const create = async representation => {
     senha: hashedPassord
   });
 
-  return await entity.save();
+  return entity.save();
+};
+
+const login = async representation => {
+  const usuario = await findByName(representation.username);
+
+  if (!isValidPassword(representation.senha, usuario.senha)) {
+    throw {
+      type: EXCEPTION_TYPES.FORBIDDEN,
+      message: 'Senha inválida'
+    };
+  }
+
+  return usuario;
 };
 
 module.exports = {
   findAll: findAll,
   findById: findById,
+  login: login,
   create: create
 };

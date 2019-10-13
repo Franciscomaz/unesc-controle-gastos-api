@@ -1,26 +1,21 @@
-const ERROR_TYPES = require('../core/error/types');
+const EXCEPTION_TYPES = require('../core/exception/types');
 
-const ObjectId = require('mongoose').Types.ObjectId;
 const Lancamento = require('../models/lancamento');
+const ObjectIdWrapper = require('../core/database/object-id.wrapper');
 
 const findAll = async () => {
   return await Lancamento.find();
 };
 
 const findById = async objectId => {
-  if (!ObjectId.isValid(objectId)) {
-    throw {
-      message: `Formato do id inválido: ${objectId}`,
-      type: ERROR_TYPES.VALIDATION
-    };
-  }
+  const objectIdWrapper = new ObjectIdWrapper(objectId);
 
-  const entity = await Lancamento.findById(objectId);
+  const entity = await Lancamento.findById(objectIdWrapper.get());
 
   if (!entity) {
     throw {
-      type: ERROR_TYPES.NOT_FOUND,
-      message: `Lançamento não encontrado para o id: ${objectId}`
+      type: EXCEPTION_TYPES.NOT_FOUND,
+      message: `Lançamento não encontrado para o id: ${objectIdWrapper.get()}`
     };
   }
 
@@ -30,7 +25,7 @@ const findById = async objectId => {
 const create = async representation => {
   const entity = new Lancamento(representation);
 
-  return await entity.save();
+  return entity.save();
 };
 
 const update = async (id, representation) => {
@@ -38,9 +33,7 @@ const update = async (id, representation) => {
 
   const entity = updateAttributes(toBeUpdatedEntity, representation);
 
-  const updated = await entity.save();
-
-  return updated;
+  return entity.save();
 };
 
 const remove = async id => {

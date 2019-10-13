@@ -24,6 +24,11 @@ module.exports = {
       )
     );
   },
+  forbiddenErrorMessage: detail => {
+    return createErrorResponse(
+      createGenericErrorMessage('Acesso restrito', detail, HTTP_CODES.FORBIDDEN)
+    );
+  },
   notFoundErrorMessage: detail => {
     return createErrorResponse(
       createGenericErrorMessage(

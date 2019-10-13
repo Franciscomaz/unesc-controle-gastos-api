@@ -1,5 +1,5 @@
 const HTTP_CODES = require('../../http/status-codes');
-const ERROR_TYPES = require('../types');
+const EXCEPTION_TYPES = require('../types');
 
 const factory = require('../message.factory');
 
@@ -8,7 +8,7 @@ const handler = (err, req, res, next) => {
     return next(err);
   }
 
-  if (err.name === ERROR_TYPES.MONGOOSE_VALIDATION) {
+  if (err.name === EXCEPTION_TYPES.MONGOOSE_VALIDATION) {
     const errors = [];
 
     for (const error in err.errors) {

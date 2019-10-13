@@ -1,30 +1,18 @@
 const router = require('express').Router();
 const service = require('../services/lancamento.service');
 
-const toRepresentation = (...entities) => {
-  if (!entities.length) {
-    return [];
-  }
-
-  const createRepresentation = entity => {
-    return {
-      id: entity.id,
-      nome: entity.nome,
-      valor: entity.valor
-    };
+const toRepresentation = entity => {
+  return {
+    id: entity.id,
+    nome: entity.nome,
+    valor: entity.valor
   };
-
-  if (entities.length > 1) {
-    return entities.map(entity => createRepresentation(entity));
-  }
-
-  return createRepresentation(...entities);
 };
 
 router.get('', async function(req, res, next) {
   try {
     const entities = await service.findAll();
-    res.send(toRepresentation(...entities));
+    res.send(entities.map(entity => toRepresentation(entity)));
   } catch (err) {
     next(err);
   }

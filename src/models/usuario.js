@@ -9,7 +9,17 @@ const UsuarioSchema = new Mongoose.Schema({
   username: {
     type: String,
     required: [true, 'É necessário informar o usuário'],
-    index: true
+    index: true,
+    validate: {
+      validator: username => {
+        return Mongoose.model('usuarios')
+          .exists({
+            username: username
+          })
+          .then(isUsernameInUse => !isUsernameInUse);
+      },
+      message: props => `O usuário ${props.value} já existe`
+    }
   },
   senha: {
     type: String,
