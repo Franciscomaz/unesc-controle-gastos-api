@@ -7,6 +7,8 @@ require('dotenv').config();
 require('./src/core/database/connection').connect();
 require('./src/resources/index')(app);
 
+app.use(require('./src/core/authentication/auth.service').config());
+
 app.use(require('./src/core/exception/handlers/validation-error-handler'));
 app.use(require('./src/core/exception/handlers/default-error-handler'));
 app.use(require('./src/core/exception/handlers/internal-error-handler'));

@@ -1,9 +1,7 @@
 const EXCEPTION_TYPES = require('../core/exception/types');
 
-const {
-  encrypt,
-  isValidPassword
-} = require('../core/authentication/crypto.service');
+const cryptService = require('../core/authentication/crypto.service');
+const jwtService = require('jsonwebtoken');
 
 const Usuario = require('../models/usuario');
 const ObjectIdWrapper = require('../core/database/object-id.wrapper');
@@ -41,7 +39,7 @@ const findByName = async username => {
 };
 
 const create = async representation => {
-  const hashedPassord = encrypt(representation.senha);
+  const hashedPassord = cryptService.encrypt(representation.senha);
 
   const entity = new Usuario({
     nome: representation.nome,
@@ -55,14 +53,16 @@ const create = async representation => {
 const login = async representation => {
   const usuario = await findByName(representation.username);
 
-  if (!isValidPassword(representation.senha, usuario.senha)) {
+  if (!cryptService.isValidPassword(representation.senha, usuario.senha)) {
     throw {
       type: EXCEPTION_TYPES.FORBIDDEN,
       message: 'Senha inválida'
     };
   }
 
-  return usuario;
+  return jwtService.sign({ usuario_id: usuario.id }, process.env.AUTH_SECRET, {
+    expiresIn: process.env.AUTH_EXPIRATION
+  });
 };
 
 module.exports = {

@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const service = require('../services/lancamento.service');
+const { authenticate } = require('../core/authentication/auth.service');
 
 const toRepresentation = entity => {
   return {
@@ -9,7 +10,7 @@ const toRepresentation = entity => {
   };
 };
 
-router.get('', async function(req, res, next) {
+router.get('', authenticate(), async function(req, res, next) {
   try {
     const entities = await service.findAll();
     res.send(entities.map(entity => toRepresentation(entity)));
@@ -18,7 +19,7 @@ router.get('', async function(req, res, next) {
   }
 });
 
-router.get('/:id', async function(req, res, next) {
+router.get('/:id', authenticate(), async function(req, res, next) {
   try {
     res.send(toRepresentation(await service.findById(req.params.id)));
   } catch (err) {
@@ -26,7 +27,7 @@ router.get('/:id', async function(req, res, next) {
   }
 });
 
-router.post('', async function(req, res, next) {
+router.post('', authenticate(), async function(req, res, next) {
   try {
     res.send(toRepresentation(await service.create(req.body)));
   } catch (err) {
@@ -34,7 +35,7 @@ router.post('', async function(req, res, next) {
   }
 });
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', authenticate(), async (req, res, next) => {
   try {
     res.send(toRepresentation(await service.update(req.params.id, req.body)));
   } catch (err) {
@@ -42,7 +43,7 @@ router.put('/:id', async (req, res, next) => {
   }
 });
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', authenticate(), async (req, res, next) => {
   try {
     res.send(toRepresentation(await service.remove(req.params.id)));
   } catch (err) {

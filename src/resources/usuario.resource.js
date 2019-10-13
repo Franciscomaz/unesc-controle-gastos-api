@@ -28,7 +28,8 @@ router.get('/:id', async function(req, res, next) {
 
 router.post('/login', async function(req, res, next) {
   try {
-    res.send(toRepresentation(await service.login(req.body)));
+    const token = await service.login(req.body);
+    res.send({ token: token });
   } catch (err) {
     next(err);
   }
