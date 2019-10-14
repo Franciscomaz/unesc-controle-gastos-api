@@ -1,7 +1,7 @@
 const EXCEPTION_TYPES = require('../core/exception/types');
 
 const cryptService = require('../core/authentication/crypto.service');
-const jwtService = require('jsonwebtoken');
+const authService = require('../core/authentication/auth.service');
 
 const Usuario = require('../models/usuario');
 const ObjectIdWrapper = require('../core/database/object-id.wrapper');
@@ -60,9 +60,7 @@ const login = async representation => {
     };
   }
 
-  return jwtService.sign({ usuario_id: usuario.id }, process.env.AUTH_SECRET, {
-    expiresIn: process.env.AUTH_EXPIRATION
-  });
+  return authService.gerarToken({ usuario_id: usuario.id });
 };
 
 module.exports = {
