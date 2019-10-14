@@ -1,23 +1,19 @@
-const router = require('express').Router({ mergeParams: true });
-const service = require('../services/lancamento.service');
+const router = require('express').Router();
+const service = require('../services/conta.service');
 const { authenticate } = require('../core/authentication/auth.service');
 
 const toRepresentation = entity => {
   return {
     id: entity.id,
-    nome: entity.nome,
-    valor: entity.valor,
-    conta: entity.conta
+    nome: entity.nome
   };
 };
 
+router.use('/:contaId/lancamentos', require('./lancamento.resource'));
+
 router.get('', authenticate(), async function(req, res, next) {
   try {
-    const entities = await service.findAll({
-      usuario: req.user.id,
-      conta: req.params.contaId
-    });
-
+    const entities = await service.findAll({ usuario: req.user.id });
     res.send(entities.map(entity => toRepresentation(entity)));
   } catch (err) {
     next(err);
@@ -36,8 +32,6 @@ router.post('', authenticate(), async function(req, res, next) {
   try {
     const payload = {
       nome: req.body.nome,
-      valor: req.body.valor,
-      conta: req.params.contaId,
       usuario: req.user.id
     };
 
