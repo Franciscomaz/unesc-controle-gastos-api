@@ -1,12 +1,11 @@
 const express = require('express');
 const app = express();
 
-app.use(express.json());
-
 require('dotenv').config();
 require('./src/core/database/connection').connect();
-require('./src/resources/index')(app);
 
+app.use(express.json());
+app.use('/api/v1', require('./src/resources/index'));
 app.use(require('./src/core/authentication/auth.config').initialize());
 
 app.use(require('./src/core/exception/handlers/validation-error-handler'));
