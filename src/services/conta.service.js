@@ -23,9 +23,7 @@ const findById = async objectId => {
 };
 
 const create = async representation => {
-  const entity = new Conta(representation);
-
-  return entity.save();
+  return Conta.create(representation);
 };
 
 const update = async (id, representation) => {

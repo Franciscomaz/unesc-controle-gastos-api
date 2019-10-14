@@ -23,9 +23,7 @@ const findById = async objectId => {
 };
 
 const create = async representation => {
-  const entity = new Lancamento(representation);
-
-  return entity.save();
+  return Lancamento.create(representation);
 };
 
 const update = async (id, representation) => {

@@ -41,13 +41,11 @@ const findByName = async username => {
 const create = async representation => {
   const hashedPassord = cryptService.encrypt(representation.senha);
 
-  const entity = new Usuario({
+  return Usuario.create({
     nome: representation.nome,
     username: representation.username,
     senha: hashedPassord
   });
-
-  return entity.save();
 };
 
 const login = async representation => {
