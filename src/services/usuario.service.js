@@ -48,6 +48,12 @@ const create = async representation => {
   });
 };
 
+const remove = async id => {
+  const toBeRemovedEntity = await findById(id);
+  await Usuario.findByIdAndRemove(toBeRemovedEntity.id);
+  return toBeRemovedEntity;
+};
+
 const login = async representation => {
   const usuario = await findByName(representation.username);
 
@@ -65,5 +71,6 @@ module.exports = {
   findAll: findAll,
   findById: findById,
   login: login,
-  create: create
+  create: create,
+  remove: remove
 };
