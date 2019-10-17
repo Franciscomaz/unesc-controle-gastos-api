@@ -1,5 +1,8 @@
 const router = require('express').Router();
 const service = require('../services/usuario.service');
+const responseUtils = require('../utils/response-utils');
+const { formatUrl } = require('../utils/url-utils');
+const { CREATED } = require('../core/http/status-codes');
 
 const toRepresentation = entity => {
   return {
@@ -12,7 +15,12 @@ const toRepresentation = entity => {
 router.get('', async function(req, res, next) {
   try {
     const entities = await service.findAll();
-    res.send(entities.map(entity => toRepresentation(entity)));
+
+    const response = responseUtils.successResponse(
+      entities.map(entity => toRepresentation(entity))
+    );
+
+    res.send(response);
   } catch (err) {
     next(err);
   }
@@ -20,7 +28,13 @@ router.get('', async function(req, res, next) {
 
 router.get('/:id', async function(req, res, next) {
   try {
-    res.send(toRepresentation(await service.findById(req.params.id)));
+    const foundEntity = await service.findById(req.params.id);
+
+    const response = responseUtils.successResponse(
+      toRepresentation(foundEntity)
+    );
+
+    res.send(response);
   } catch (err) {
     next(err);
   }
@@ -28,7 +42,9 @@ router.get('/:id', async function(req, res, next) {
 
 router.post('/login', async function(req, res, next) {
   try {
-    res.send({ token: await service.login(req.body) });
+    const token = await service.login(req.body);
+
+    res.send(responseUtils.successResponse({ token: token }));
   } catch (err) {
     next(err);
   }
@@ -36,7 +52,14 @@ router.post('/login', async function(req, res, next) {
 
 router.post('', async function(req, res, next) {
   try {
-    res.send(toRepresentation(await service.create(req.body)));
+    const createdEntity = await service.create(req.body);
+
+    const response = responseUtils.createdResponse(
+      toRepresentation(createdEntity),
+      formatUrl(req.protocol, req.hostname, `usuarios/${createdEntity.id}`)
+    );
+
+    res.status(CREATED).send(response);
   } catch (err) {
     next(err);
   }
@@ -44,7 +67,13 @@ router.post('', async function(req, res, next) {
 
 router.put('/:id', async (req, res, next) => {
   try {
-    res.send(toRepresentation(await service.update(req.params.id, req.body)));
+    const updatedEntity = await service.update(req.params.id, req.body);
+
+    const response = responseUtils.successResponse(
+      toRepresentation(updatedEntity)
+    );
+
+    res.send(response);
   } catch (err) {
     next(err);
   }
@@ -52,7 +81,13 @@ router.put('/:id', async (req, res, next) => {
 
 router.delete('/:id', async (req, res, next) => {
   try {
-    res.send(toRepresentation(await service.remove(req.params.id)));
+    const removedEntity = await service.remove(req.params.id);
+
+    const response = responseUtils.successResponse(
+      toRepresentation(removedEntity)
+    );
+
+    res.send(response);
   } catch (err) {
     next(err);
   }
