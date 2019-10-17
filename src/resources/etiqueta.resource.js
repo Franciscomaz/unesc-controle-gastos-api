@@ -1,8 +1,9 @@
+const { CREATED } = require('../core/http/status-codes');
+
 const router = require('express').Router({ mergeParams: true });
 const service = require('../services/etiqueta.service');
 const responseUtils = require('../utils/response-utils');
 const { formatUrl } = require('../utils/url-utils');
-const { CREATED } = require('../core/http/status-codes');
 const { authenticate } = require('../core/authentication/auth.service');
 
 const toRepresentation = entity => {

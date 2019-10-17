@@ -1,8 +1,9 @@
+const { CREATED } = require('../core/http/status-codes');
+
 const router = require('express').Router();
 const service = require('../services/usuario.service');
 const responseUtils = require('../utils/response-utils');
 const { formatUrl } = require('../utils/url-utils');
-const { CREATED } = require('../core/http/status-codes');
 
 const toRepresentation = entity => {
   return {
