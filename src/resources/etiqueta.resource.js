@@ -3,6 +3,7 @@ const { CREATED } = require('../core/http/status-codes');
 const router = require('express').Router({ mergeParams: true });
 const service = require('../services/etiqueta.service');
 const responseUtils = require('../utils/response-utils');
+const Pagination = require('../utils/pagination');
 const { formatUrl } = require('../utils/url-utils');
 const { authenticate } = require('../core/authentication/auth.service');
 
@@ -15,9 +16,14 @@ const toRepresentation = entity => {
 
 router.get('', authenticate(), async function(req, res, next) {
   try {
-    const entities = await service.findAll({
-      usuario: req.user.id
-    });
+    const filter = {
+      usuario: req.user.id,
+      nome: new RegExp(req.query.nome, 'i')
+    };
+
+    const entities = await service.findAll(
+      new Pagination(filter, req.query.limit)
+    );
 
     const response = responseUtils.successResponse(
       entities.map(entity => toRepresentation(entity))

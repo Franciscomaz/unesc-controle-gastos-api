@@ -3,8 +3,10 @@ const EXCEPTION_TYPES = require('../core/exception/types');
 const Lancamento = require('../models/lancamento');
 const ObjectIdWrapper = require('../core/database/object-id.wrapper');
 
-const findAll = async filter => {
-  return await Lancamento.find(filter);
+const findAll = async pagination => {
+  return await Lancamento.find(pagination.query)
+    .limit(pagination.limit)
+    .exec();
 };
 
 const findById = async objectId => {

@@ -6,8 +6,10 @@ const authService = require('../core/authentication/auth.service');
 const Usuario = require('../models/usuario');
 const ObjectIdWrapper = require('../core/database/object-id.wrapper');
 
-const findAll = async () => {
-  return await Usuario.find();
+const findAll = async pagination => {
+  return await Usuario.find(pagination.query)
+    .limit(pagination.limit)
+    .exec();
 };
 
 const findById = async objectId => {

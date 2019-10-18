@@ -1,6 +1,6 @@
 const Mongoose = require('mongoose');
 
-const LancamentoSchema = new Mongoose.Schema(
+const EtiquetaLancamentoSchema = new Mongoose.Schema(
   {
     lancamento: {
       type: Mongoose.Schema.Types.ObjectId,
@@ -18,4 +18,7 @@ const LancamentoSchema = new Mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = Mongoose.model('lancamentos_etiquetas', LancamentoSchema);
+module.exports = Mongoose.model(
+  'lancamentos_etiquetas',
+  EtiquetaLancamentoSchema
+);

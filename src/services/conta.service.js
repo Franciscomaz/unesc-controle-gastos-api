@@ -3,8 +3,10 @@ const EXCEPTION_TYPES = require('../core/exception/types');
 const Conta = require('../models/conta');
 const ObjectIdWrapper = require('../core/database/object-id.wrapper');
 
-const findAll = async filter => {
-  return await Conta.find(filter);
+const findAll = async pagination => {
+  return await Conta.find(pagination.query)
+    .limit(pagination.limit)
+    .exec();
 };
 
 const findById = async objectId => {
