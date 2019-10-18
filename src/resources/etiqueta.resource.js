@@ -60,7 +60,7 @@ router.post('', authenticate(), async function(req, res, next) {
 
     const response = responseUtils.createdResponse(
       toRepresentation(createdEntity),
-      formatUrl(req.protocol, req.host, `${createdEntity.id}`)
+      formatUrl(req.protocol, req.hostname, `${createdEntity.id}`)
     );
 
     res.status(CREATED).send(response);
