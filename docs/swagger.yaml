@@ -12,7 +12,7 @@ paths:
       summary: Retorna todos os usuários
       parameters:
         - in: query
-          name: Nome
+          name: nome
           schema:
             type: string
           description: Retorna os usuários que contém a string no nome
@@ -144,7 +144,7 @@ paths:
       summary: Retorna todas as contas
       parameters:
         - in: query
-          name: Nome
+          name: nome
           schema:
             type: string
           description: Retorna as contas que contém a string no nome
@@ -265,7 +265,7 @@ paths:
       summary: Retorna todos os lançamentos
       parameters:
         - in: query
-          name: Nome
+          name: nome
           schema:
             type: string
           description: Retorna os lançamentos que contém a string no nome
@@ -385,7 +385,7 @@ paths:
       summary: Retorna todas as etiquetas
       parameters:
         - in: query
-          name: Nome
+          name: nome
           schema:
             type: string
           description: Retorna as etiquetas que contém a string no nome
