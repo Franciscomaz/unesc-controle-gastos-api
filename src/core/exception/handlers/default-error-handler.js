@@ -25,6 +25,10 @@ const handler = (err, req, res, next) => {
       .status(HTTP_CODES.FORBIDDEN)
       .send(factory.forbiddenErrorMessage(err.message));
   }
+
+  console.warn('Tipo de erro não encontrado:', err.type);
+
+  next(err);
 };
 
 module.exports = handler;
