@@ -1,10 +1,6 @@
 const HTTP_CODES = require('../http/status-codes');
 
-const createErrorResponse = (...errors) => {
-  return {
-    errors: errors
-  };
-};
+const { errorResponse } = require('../../utils/response-utils');
 
 const createGenericErrorMessage = (title, detail, status) => {
   return {
@@ -16,7 +12,7 @@ const createGenericErrorMessage = (title, detail, status) => {
 
 module.exports = {
   internalErrorMessage: detail => {
-    return createErrorResponse(
+    return errorResponse(
       createGenericErrorMessage(
         'Erro interno do servidor',
         detail,
@@ -25,12 +21,12 @@ module.exports = {
     );
   },
   forbiddenErrorMessage: detail => {
-    return createErrorResponse(
+    return errorResponse(
       createGenericErrorMessage('Acesso restrito', detail, HTTP_CODES.FORBIDDEN)
     );
   },
   notFoundErrorMessage: detail => {
-    return createErrorResponse(
+    return errorResponse(
       createGenericErrorMessage(
         'Entidade não encontrada',
         detail,
@@ -47,6 +43,6 @@ module.exports = {
       )
     );
 
-    return createErrorResponse(errors);
+    return errorResponse(errors);
   }
 };

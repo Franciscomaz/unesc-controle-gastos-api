@@ -11,5 +11,10 @@ module.exports = {
         self: resourcePath
       }
     };
+  },
+  errorResponse: (...errors) => {
+    return {
+      errors: errors
+    };
   }
 };
