@@ -9,6 +9,7 @@ const ObjectIdWrapper = require('../core/database/object-id.wrapper');
 const findAll = async pagination => {
   return await Usuario.find(pagination.query)
     .limit(pagination.limit)
+    .skip(pagination.offset)
     .exec();
 };
 

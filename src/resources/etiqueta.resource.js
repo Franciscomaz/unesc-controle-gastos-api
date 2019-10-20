@@ -22,7 +22,7 @@ router.get('', authenticate(), async function(req, res, next) {
     };
 
     const entities = await service.findAll(
-      new Pagination(filter, req.query.limit)
+      new Pagination(filter, req.query.limit, req.query.offset)
     );
 
     const response = responseUtils.successResponse(
