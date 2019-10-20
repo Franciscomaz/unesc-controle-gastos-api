@@ -1,6 +1,6 @@
 const Mongoose = require('mongoose');
 
-const EtiquetaSchema = new Mongoose.Schema(
+const etiquetaSchema = new Mongoose.Schema(
   {
     nome: {
       type: String,
@@ -25,4 +25,4 @@ const EtiquetaSchema = new Mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = Mongoose.model('etiquetas', EtiquetaSchema);
+module.exports = Mongoose.model('etiquetas', etiquetaSchema);

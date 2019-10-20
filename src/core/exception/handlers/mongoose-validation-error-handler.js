@@ -4,7 +4,7 @@ const EXCEPTION_TYPES = require('../types');
 const { validationErrorMessage } = require('../message.factory');
 
 const handler = (err, req, res, next) => {
-  if (!err.name && err.name !== EXCEPTION_TYPES.MONGOOSE_VALIDATION) {
+  if (!err.name || err.name !== EXCEPTION_TYPES.MONGOOSE_VALIDATION) {
     return next(err);
   }
 

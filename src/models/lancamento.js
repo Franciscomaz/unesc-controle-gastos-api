@@ -1,13 +1,13 @@
 const Mongoose = require('mongoose');
 
-const LancamentoSchema = new Mongoose.Schema(
+const lancamentoSchema = new Mongoose.Schema(
   {
     nome: {
       type: String,
       required: [true, 'É necessário informar o nome']
     },
     valor: {
-      type: String,
+      type: Number,
       required: [true, 'É necessário informar o valor']
     },
     conta: {
@@ -26,4 +26,4 @@ const LancamentoSchema = new Mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = Mongoose.model('lancamentos', LancamentoSchema);
+module.exports = Mongoose.model('lancamentos', lancamentoSchema);

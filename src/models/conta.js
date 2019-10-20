@@ -1,6 +1,6 @@
 const Mongoose = require('mongoose');
 
-const ContaSchema = new Mongoose.Schema(
+const contaSchema = new Mongoose.Schema(
   {
     nome: {
       type: String,
@@ -16,4 +16,4 @@ const ContaSchema = new Mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = Mongoose.model('contas', ContaSchema);
+module.exports = Mongoose.model('contas', contaSchema);
