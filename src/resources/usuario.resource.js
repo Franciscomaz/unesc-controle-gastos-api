@@ -3,6 +3,7 @@ const { CREATED } = require('../core/http/status-codes');
 const router = require('express').Router();
 const service = require('../services/usuario.service');
 const responseUtils = require('../utils/response-utils');
+const Pagination = require('../utils/pagination');
 const { formatUrl } = require('../utils/url-utils');
 
 const toRepresentation = entity => {
@@ -15,7 +16,13 @@ const toRepresentation = entity => {
 
 router.get('', async function(req, res, next) {
   try {
-    const entities = await service.findAll();
+    const filter = {
+      nome: new RegExp(req.query.nome, 'i')
+    };
+
+    const entities = await service.findAll(
+      new Pagination(filter, req.query.limit)
+    );
 
     const response = responseUtils.successResponse(
       entities.map(entity => toRepresentation(entity))

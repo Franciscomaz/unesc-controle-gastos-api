@@ -21,7 +21,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#components/schemas/Usuario"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#components/schemas/Usuario"
+                  }
                 }
               }
             }
@@ -36,8 +39,7 @@
           "required": true,
           "content": {
             "application/json": {
-              "type": "array",
-              "items": {
+              "schema": {
                 "$ref": "#components/schemas/Usuario"
               }
             }
@@ -188,7 +190,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#components/schemas/Conta"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#components/schemas/Conta"
+                  }
                 }
               }
             }
@@ -208,10 +213,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#components/schemas/Conta"
-                }
+                "$ref": "#components/schemas/Conta"
               }
             }
           }
@@ -476,7 +478,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#components/schemas/Etiqueta"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#components/schemas/Etiqueta"
+                  }
                 }
               }
             }
@@ -496,10 +501,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#components/schemas/Etiqueta"
-                }
+                "$ref": "#components/schemas/Etiqueta"
               }
             }
           }
@@ -634,7 +636,7 @@
         "example": {
           "id": "5da268bab917a843a850531a",
           "nome": "Francisco Mazzuco",
-          "usuario": "fmazzuco",
+          "username": "fmazzuco",
           "senha": "1234"
         },
         "required": ["nome", "username", "senha"]
