@@ -8,10 +8,16 @@ const handler = (err, req, res, next) => {
     return next(err);
   }
 
-  if (err.type === EXCEPTION_TYPES.VALIDATION) {
+  if (err.type === EXCEPTION_TYPES.BAD_REQUEST) {
     res
-      .status(HTTP_CODES.VALIDATION_ERROR)
+      .status(HTTP_CODES.BAD_REQUEST)
       .send(factory.validationErrorMessage(err.message));
+  }
+
+  if (err.type === EXCEPTION_TYPES.FORBIDDEN) {
+    res
+      .status(HTTP_CODES.FORBIDDEN)
+      .send(factory.forbiddenErrorMessage(err.message));
   }
 
   if (err.type === EXCEPTION_TYPES.NOT_FOUND) {
@@ -20,10 +26,10 @@ const handler = (err, req, res, next) => {
       .send(factory.notFoundErrorMessage(err.message));
   }
 
-  if (err.type === EXCEPTION_TYPES.FORBIDDEN) {
+  if (err.type === EXCEPTION_TYPES.VALIDATION) {
     res
-      .status(HTTP_CODES.FORBIDDEN)
-      .send(factory.forbiddenErrorMessage(err.message));
+      .status(HTTP_CODES.VALIDATION_ERROR)
+      .send(factory.validationErrorMessage(err.message));
   }
 
   console.warn('Tipo de erro não encontrado:', err.type);

@@ -11,12 +11,12 @@ const createGenericErrorMessage = (title, detail, status) => {
 };
 
 module.exports = {
-  internalErrorMessage: detail => {
+  badRequestErrorMessage: detail => {
     return errorResponse(
       createGenericErrorMessage(
-        'Erro interno do servidor',
+        'Requisição mal formada',
         detail,
-        HTTP_CODES.INTERNAL_ERROR
+        HTTP_CODES.BAD_REQUEST
       )
     );
   },
@@ -44,5 +44,14 @@ module.exports = {
     );
 
     return errorResponse(errors);
+  },
+  internalErrorMessage: detail => {
+    return errorResponse(
+      createGenericErrorMessage(
+        'Erro interno do servidor',
+        detail,
+        HTTP_CODES.INTERNAL_ERROR
+      )
+    );
   }
 };

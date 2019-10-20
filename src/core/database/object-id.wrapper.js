@@ -7,7 +7,7 @@ module.exports = class ObjectIdWrapper {
     if (!ObjectId.isValid(value)) {
       throw {
         message: `Formato do id inválido: ${value}`,
-        type: EXCEPTION_TYPES.VALIDATION
+        type: EXCEPTION_TYPES.BAD_REQUEST
       };
     }
 
