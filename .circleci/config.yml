@@ -1,0 +1,41 @@
+version: 2
+jobs:
+  install:
+    docker:
+      - image: circleci/node:9.9
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+      - run: yarn install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run: yarn test
+
+  build_image:
+    docker:
+      - image: docker:19.03.4
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: false
+      - run: docker login --username $DOCKER_USER -p $DOCKER_PASS
+      - run: docker build -t fmazzuco/controle-financeiro-api:production .
+      - run: docker push fmazzuco/controle-financeiro-api:production
+
+workflows:
+  version: 2
+  compile:
+    jobs:
+      - install
+  build:
+    jobs:
+      - build_image:
+          context: Production
+          requires:
+            - install
