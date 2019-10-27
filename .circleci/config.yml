@@ -37,5 +37,3 @@ workflows:
     jobs:
       - build_image:
           context: Production
-          requires:
-            - install
