@@ -33,7 +33,7 @@ workflows:
   compile:
     jobs:
       - install
-  build:
-    jobs:
       - build_image:
           context: Production
+          requires:
+            - install
