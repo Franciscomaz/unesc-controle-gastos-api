@@ -2,7 +2,7 @@ version: 2
 jobs:
   install:
     docker:
-      - image: circleci/node:9.9
+      - image: circleci/node:13
     working_directory: ~/repo
     steps:
       - checkout
@@ -19,7 +19,7 @@ jobs:
 
   build_image:
     docker:
-      - image: docker:19.03.4
+      - image: circleci/node:13
     steps:
       - checkout
       - setup_remote_docker:
