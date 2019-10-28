@@ -1,6 +1,19 @@
 version: 2
+workflows:
+  version: 2
+  compile:
+    jobs:
+      - compile
+      - build:
+          context: Production
+          requires:
+            - compile
+      - deploy:
+          context: Production
+          requires:
+            - build
 jobs:
-  install:
+  compile:
     docker:
       - image: circleci/node:13
     working_directory: ~/repo
@@ -9,31 +22,47 @@ jobs:
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
+
       - run: yarn install
+      - run: yarn test
+
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - run: yarn test
-
-  build_image:
+  build:
     docker:
       - image: circleci/node:13
     steps:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: false
-      - run: docker login -u $DOCKER_USER -p "$DOCKER_PASS"
-      - run: docker build -t fmazzuco/controle-financeiro-api:production .
-      - run: docker push fmazzuco/controle-financeiro-api:production
 
-workflows:
-  version: 2
-  compile:
-    jobs:
-      - install
-      - build_image:
-          context: Production
-          requires:
-            - install
+      - run:
+          name: Deploy to dockerhub
+          command: |
+            echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+            docker build -t fmazzuco/controle-financeiro-api:production .
+            docker push fmazzuco/controle-financeiro-api:production
+
+  deploy:
+    docker:
+      - image: circleci/node:13
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: false
+
+      - run:
+          name: Pull from dockerhub
+          command: |
+            echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+            docker pull fmazzuco/controle-financeiro-api:production
+
+      - run:
+          name: Deploy to Heroku
+          command: |
+            docker login --username=$HEROKU_EMAIL --password=$HEROKU_API_KEY registry.heroku.com
+            docker tag fmazzuco/controle-financeiro-api:production registry.heroku.com/$HEROKU_APP_NAME/web
+            docker push registry.heroku.com/$HEROKU_APP_NAME/web
