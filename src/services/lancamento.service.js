@@ -1,7 +1,7 @@
 const EXCEPTION_TYPES = require('../core/exception/types');
 
 const Lancamento = require('../models/lancamento');
-const ObjectIdWrapper = require('../core/database/object-id.wrapper');
+const ObjectIdWrapper = require('../core/database/object-id-wrapper');
 
 const findAll = async pagination => {
   return await Lancamento.find(pagination.query)
@@ -16,6 +16,7 @@ const findById = async objectId => {
   const entity = await Lancamento.findById(objectIdWrapper.get());
 
   if (!entity) {
+    // TODO: Refatorar para utilizar objeto de erro nativo do javascript
     throw {
       type: EXCEPTION_TYPES.NOT_FOUND,
       message: `Lançamento não encontrado para o id: ${objectIdWrapper.get()}`

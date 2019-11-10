@@ -2,9 +2,10 @@
   "name": "controle-financeiro",
   "version": "1.0.0",
   "description": "Aplicativo para gerenciamento de gastos pessoais",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "dev": "nodemon server.js",
+    "start": "node server.js",
     "test": "echo ok"
   },
   "keywords": [

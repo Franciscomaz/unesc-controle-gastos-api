@@ -4,7 +4,7 @@ const cryptService = require('../core/authentication/crypto.service');
 const authService = require('../core/authentication/auth.service');
 
 const Usuario = require('../models/usuario');
-const ObjectIdWrapper = require('../core/database/object-id.wrapper');
+const ObjectIdWrapper = require('../core/database/object-id-wrapper');
 
 const findAll = async pagination => {
   return await Usuario.find(pagination.query)
@@ -19,6 +19,7 @@ const findById = async objectId => {
   const entity = await Usuario.findById(objectIdWrapper.get());
 
   if (!entity) {
+    // TODO: Refatorar para utilizar objeto de erro nativo do javascript
     throw {
       type: EXCEPTION_TYPES.NOT_FOUND,
       message: `Usuário não encontrado para o id: ${objectIdWrapper.get()}`
@@ -32,6 +33,7 @@ const findByName = async username => {
   const entity = await Usuario.findOne({ username: username });
 
   if (!entity) {
+    // TODO: Refatorar para utilizar objeto de erro nativo do javascript
     throw {
       type: EXCEPTION_TYPES.NOT_FOUND,
       message: `Usuário ${username} não encontrado`
@@ -61,6 +63,7 @@ const login = async representation => {
   const usuario = await findByName(representation.username);
 
   if (!cryptService.isValidPassword(representation.senha, usuario.senha)) {
+    // TODO: Refatorar para utilizar objeto de erro nativo do javascript
     throw {
       type: EXCEPTION_TYPES.FORBIDDEN,
       message: 'Senha inválida'

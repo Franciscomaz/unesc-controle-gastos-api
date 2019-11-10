@@ -1,7 +1,7 @@
 const EXCEPTION_TYPES = require('../core/exception/types');
 
 const Conta = require('../models/conta');
-const ObjectIdWrapper = require('../core/database/object-id.wrapper');
+const ObjectIdWrapper = require('../core/database/object-id-wrapper');
 
 const findAll = async pagination => {
   return await Conta.find(pagination.query)
@@ -16,6 +16,8 @@ const findById = async objectId => {
   const entity = await Conta.findById(objectIdWrapper.get());
 
   if (!entity) {
+
+    // TODO: Refatorar para utilizar objeto de erro nativo do javascript
     throw {
       type: EXCEPTION_TYPES.NOT_FOUND,
       message: `Conta não encontrada para o id: ${objectIdWrapper.get()}`
