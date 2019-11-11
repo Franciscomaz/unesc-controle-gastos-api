@@ -12,7 +12,7 @@ module.exports = {
       }
     };
   },
-  errorResponse: (...errors) => {
+  errorResponse: errors => {
     return {
       errors: errors
     };
