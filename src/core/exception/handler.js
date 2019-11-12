@@ -51,13 +51,14 @@ const handleError = error => {
 
   console.warn('Não foi encontrado um tipo para o erro:', error);
 
-  return null;
+  return error;
 };
 
 const createHttpError = (status, message) => {
   return {
     status: status,
-    message: message
+    message: message,
+    isAMappedApplicationError: true
   };
 };
 

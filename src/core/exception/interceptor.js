@@ -2,10 +2,11 @@ const errorHandler = require('./handler');
 const { errorResponse } = require('../../utils/response-utils');
 
 module.exports = (err, req, res, next) => {
-  const httpError = errorHandler.handleError(err);
-  if (!httpError) {
+  const error = errorHandler.handleError(err);
+
+  if (!error.isAMappedApplicationError) {
     next(err);
   }
 
-  res.status(httpError.status).send(errorResponse(httpError.message));
+  res.status(error.status).send(errorResponse(error.message));
 };
