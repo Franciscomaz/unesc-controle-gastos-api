@@ -8,5 +8,9 @@ module.exports = (err, req, res, next) => {
     next(err);
   }
 
-  res.status(error.status).send(errorResponse(error.message));
+  const response = errorResponse(
+    Array.isArray(error.message) ? error.message : [error.message]
+  );
+
+  res.status(error.status).send(response);
 };
