@@ -9,5 +9,6 @@ router.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 router.use('/usuarios', require('./usuario.resource'));
 router.use('/contas', require('./conta.resource'));
 router.use('/etiquetas', require('./etiqueta.resource'));
+router.use('/authenticate', require('../core/authentication/auth.resource'));
 
 module.exports = router;

@@ -7,5 +7,6 @@ module.exports = {
       expiresIn: process.env.AUTH_EXPIRATION
     }),
   authenticate: () =>
-    passport.authenticate(process.env.AUTH_TYPE, { session: false })
+    passport.authenticate(process.env.AUTH_TYPE, { session: false }),
+  isValidToken: token => jwt.verify(token, process.env.AUTH_SECRET)
 };

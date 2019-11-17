@@ -54,6 +54,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Usuario"
+        "422":
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
       tags:
         - usuarios
   "/usuarios/{id}":
@@ -72,6 +78,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Usuario"
+        "404":
+          description: Usuário não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
       tags:
         - usuarios
     put:
@@ -90,6 +102,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Usuario"
+        "404":
+          description: Usuário não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
+        "422":
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
       tags:
         - usuarios
     delete:
@@ -101,6 +125,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Usuario"
+        "404":
+          description: Usuário não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
       tags:
         - usuarios
   /usuarios/login:
@@ -137,6 +167,18 @@ paths:
                     type: string
                 example:
                   token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoiNWRhNDgwNjVlNDM1YzYyNDcwODkwOWU5IiwiaWF0IjoxNTcxMTgzMjI4LCJleHAiOjE1NzExODY4Mjh9.w7w-2OlRMAkveOtdy_mecdPBHleIqGa6tJFABl-dKL0
+        "403":
+          description: Senha inválida
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
+        "404":
+          description: Usuário não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
       tags:
         - usuarios
   /contas:
@@ -193,6 +235,12 @@ paths:
                 $ref: "#/components/schemas/Conta"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
+        "422":
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
       tags:
         - contas
   "/contas/{id}":
@@ -215,6 +263,12 @@ paths:
                 $ref: "#/components/schemas/Conta"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Conta não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
       tags:
         - contas
     put:
@@ -237,6 +291,18 @@ paths:
                 $ref: "#/components/schemas/Conta"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Conta não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
+        "422":
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
       tags:
         - contas
     delete:
@@ -252,6 +318,12 @@ paths:
                 $ref: "#/components/schemas/Conta"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Conta não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
       tags:
         - contas
   "/contas/{contaId}/lancamentos":
@@ -314,6 +386,12 @@ paths:
                 $ref: "#/components/schemas/Lancamento"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
+        "422":
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
       tags:
         - lancamentos
   "/contas/{contaId}/lancamentos/{id}":
@@ -341,6 +419,12 @@ paths:
                 $ref: "#/components/schemas/Lancamento"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Lançamento não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
       tags:
         - lancamentos
     put:
@@ -363,6 +447,18 @@ paths:
                 $ref: "#/components/schemas/Lancamento"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Lançamento não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
+        "422":
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
       tags:
         - lancamentos
     delete:
@@ -378,6 +474,12 @@ paths:
                 $ref: "#/components/schemas/Lancamento"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Lançamento não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
       tags:
         - lancamentos
   /etiquetas:
@@ -436,6 +538,12 @@ paths:
                 $ref: "#/components/schemas/Etiqueta"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
+        "422":
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
       tags:
         - etiquetas
   "/etiquetas/{id}":
@@ -458,6 +566,12 @@ paths:
                 $ref: "#/components/schemas/Etiqueta"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Etiqueta não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
       tags:
         - etiquetas
     put:
@@ -480,6 +594,18 @@ paths:
                 $ref: "#/components/schemas/Etiqueta"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Etiqueta não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
+        "422":
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
       tags:
         - etiquetas
     delete:
@@ -495,8 +621,48 @@ paths:
                 $ref: "#/components/schemas/Etiqueta"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Etiqueta não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
       tags:
         - etiquetas
+  /authenticate:
+    post:
+      summary: Verifica se um token é válido
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Token a ser verificado
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+              example:
+                token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoiNWRhNDgwNjVlNDM1YzYyNDcwODkwOWU5IiwiaWF0IjoxNTcxMTgzMjI4LCJleHAiOjE1NzExODY4Mjh9.w7w-2OlRMAkveOtdy_mecdPBHleIqGa6tJFABl-dKL0
+      responses:
+        "204":
+          description: Informa se o token é válido
+        "400":
+          description: Token não informado
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
+        "403":
+          description: Token inválido
+          content:
+            application/json:
+              schema:
+                $ref: "#components/responses/DefaultError"
+      tags:
+        - authorization
 components:
   securitySchemes:
     bearerAuth:
@@ -580,6 +746,21 @@ components:
   responses:
     UnauthorizedError:
       description: Unauthorized
+    DefaultError:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+              detail:
+                type: string
+            example:
+              title: Não encontrado
+              detail: Lançamento de id 1 não foi encontrado
 tags:
   - name: usuarios
     description: Usuários
@@ -589,3 +770,5 @@ tags:
     description: Lançamentos
   - name: etiquetas
     description: Etiquetas
+  - name: authorization
+    description: Autorização
