@@ -1,5 +1,6 @@
-const { NO_CONTENT } = require('../http/status-codes');
-const { BAD_REQUEST, FORBIDDEN } = require('../exception/types');
+const { OK } = require('../http/status-codes');
+const { BAD_REQUEST } = require('../exception/types');
+const { successResponse } = require('../../utils/response-utils');
 
 const router = require('express').Router({ mergeParams: true });
 const service = require('./auth.service');
@@ -16,15 +17,10 @@ router.post('', (req, res, next) => {
     }
 
     try {
-      service.isValidToken(token);
+      res.status(OK).send(successResponse(service.isValidToken(token)));
     } catch {
-      throw {
-        type: FORBIDDEN,
-        message: 'Você não possui acesso para acessar este recurso'
-      };
+      res.status(OK).send(successResponse(false));
     }
-
-    res.status(NO_CONTENT).send();
   } catch (err) {
     next(err);
   }
