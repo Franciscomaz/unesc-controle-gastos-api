@@ -1,22 +1,23 @@
-const { CREATED } = require('../core/http/status-codes');
+const { CREATED } = require('../../core/http/status-codes');
 
-const router = require('express').Router();
-const service = require('../services/usuario.service');
-const responseUtils = require('../utils/response-utils');
-const Pagination = require('../utils/pagination');
-const { formatUrl } = require('../utils/url-utils');
+const router = require('express').Router({ mergeParams: true });
+const service = require('./category.service');
+const responseUtils = require('../../utils/response-utils');
+const Pagination = require('../../utils/pagination');
+const { formatUrl } = require('../../utils/url-utils');
+const { authenticate } = require('../../core/authentication/auth.service');
 
 const toRepresentation = entity => {
   return {
     id: entity.id,
-    nome: entity.nome,
-    username: entity.username
+    nome: entity.nome
   };
 };
 
-router.get('', async function(req, res, next) {
+router.get('', authenticate(), async function(req, res, next) {
   try {
     const filter = {
+      usuario: req.user.id,
       nome: new RegExp(req.query.nome, 'i')
     };
 
@@ -34,7 +35,7 @@ router.get('', async function(req, res, next) {
   }
 });
 
-router.get('/:id', async function(req, res, next) {
+router.get('/:id', authenticate(), async function(req, res, next) {
   try {
     const foundEntity = await service.findById(req.params.id);
 
@@ -48,23 +49,18 @@ router.get('/:id', async function(req, res, next) {
   }
 });
 
-router.post('/login', async function(req, res, next) {
+router.post('', authenticate(), async function(req, res, next) {
   try {
-    const token = await service.login(req.body);
+    const payload = {
+      nome: req.body.nome,
+      usuario: req.user.id
+    };
 
-    res.send(responseUtils.successResponse({ token: token }));
-  } catch (err) {
-    next(err);
-  }
-});
-
-router.post('', async function(req, res, next) {
-  try {
-    const createdEntity = await service.create(req.body);
+    const createdEntity = await service.create(payload);
 
     const response = responseUtils.createdResponse(
       toRepresentation(createdEntity),
-      formatUrl(req.protocol, req.hostname, `usuarios/${createdEntity.id}`)
+      formatUrl(req.protocol, req.hostname, `${createdEntity.id}`)
     );
 
     res.status(CREATED).send(response);
@@ -73,7 +69,7 @@ router.post('', async function(req, res, next) {
   }
 });
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', authenticate(), async (req, res, next) => {
   try {
     const updatedEntity = await service.update(req.params.id, req.body);
 
@@ -87,7 +83,7 @@ router.put('/:id', async (req, res, next) => {
   }
 });
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', authenticate(), async (req, res, next) => {
   try {
     const removedEntity = await service.remove(req.params.id);
 

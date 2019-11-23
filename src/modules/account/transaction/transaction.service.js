@@ -1,7 +1,7 @@
-const EXCEPTION_TYPES = require('../core/exception/types');
+const EXCEPTION_TYPES = require('../../../core/exception/types');
 
-const Lancamento = require('../models/lancamento');
-const ObjectIdWrapper = require('../core/database/object-id-wrapper');
+const Lancamento = require('./transaction');
+const ObjectIdWrapper = require('../../../core/database/object-id-wrapper');
 
 const findAll = async pagination => {
   return await Lancamento.find(pagination.query)

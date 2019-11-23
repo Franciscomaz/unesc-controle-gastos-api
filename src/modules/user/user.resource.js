@@ -1,27 +1,22 @@
-const { CREATED } = require('../core/http/status-codes');
+const { CREATED } = require('../../core/http/status-codes');
 
-const Pagination = require('../utils/pagination');
-
-const router = require('express').Router({ mergeParams: true });
-const service = require('../services/lancamento.service');
-const responseUtils = require('../utils/response-utils');
-const { formatUrl } = require('../utils/url-utils');
-const { authenticate } = require('../core/authentication/auth.service');
+const router = require('express').Router();
+const service = require('./user.service');
+const responseUtils = require('../../utils/response-utils');
+const Pagination = require('../../utils/pagination');
+const { formatUrl } = require('../../utils/url-utils');
 
 const toRepresentation = entity => {
   return {
     id: entity.id,
     nome: entity.nome,
-    valor: entity.valor,
-    conta: entity.conta
+    username: entity.username
   };
 };
 
-router.get('', authenticate(), async function(req, res, next) {
+router.get('', async function(req, res, next) {
   try {
     const filter = {
-      usuario: req.user.id,
-      conta: req.params.contaId,
       nome: new RegExp(req.query.nome, 'i')
     };
 
@@ -39,7 +34,7 @@ router.get('', authenticate(), async function(req, res, next) {
   }
 });
 
-router.get('/:id', authenticate(), async function(req, res, next) {
+router.get('/:id', async function(req, res, next) {
   try {
     const foundEntity = await service.findById(req.params.id);
 
@@ -53,24 +48,23 @@ router.get('/:id', authenticate(), async function(req, res, next) {
   }
 });
 
-router.post('', authenticate(), async function(req, res, next) {
+router.post('/login', async function(req, res, next) {
   try {
-    const payload = {
-      nome: req.body.nome,
-      valor: req.body.valor,
-      conta: req.params.contaId,
-      usuario: req.user.id
-    };
+    const token = await service.login(req.body);
 
-    const createdEntity = await service.create(payload);
+    res.send(responseUtils.successResponse({ token: token }));
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post('', async function(req, res, next) {
+  try {
+    const createdEntity = await service.create(req.body);
 
     const response = responseUtils.createdResponse(
       toRepresentation(createdEntity),
-      formatUrl(
-        req.protocol,
-        req.hostname,
-        `contas/${req.params.contaId}/lancamentos/${createdEntity.id}`
-      )
+      formatUrl(req.protocol, req.hostname, `usuarios/${createdEntity.id}`)
     );
 
     res.status(CREATED).send(response);
@@ -79,7 +73,7 @@ router.post('', authenticate(), async function(req, res, next) {
   }
 });
 
-router.put('/:id', authenticate(), async (req, res, next) => {
+router.put('/:id', async (req, res, next) => {
   try {
     const updatedEntity = await service.update(req.params.id, req.body);
 
@@ -93,7 +87,7 @@ router.put('/:id', authenticate(), async (req, res, next) => {
   }
 });
 
-router.delete('/:id', authenticate(), async (req, res, next) => {
+router.delete('/:id', async (req, res, next) => {
   try {
     const removedEntity = await service.remove(req.params.id);
 

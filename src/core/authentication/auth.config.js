@@ -1,7 +1,7 @@
 const passport = require('passport');
 const { Strategy, ExtractJwt } = require('passport-jwt');
 
-const userService = require('../../services/usuario.service');
+const userService = require('../../modules/user/user.service');
 
 const options = {
   secretOrKey: process.env.AUTH_SECRET,

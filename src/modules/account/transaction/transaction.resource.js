@@ -1,25 +1,27 @@
-const { CREATED } = require('../core/http/status-codes');
+const { CREATED } = require('../../../core/http/status-codes');
 
-const router = require('express').Router();
-const service = require('../services/conta.service');
-const responseUtils = require('../utils/response-utils');
-const Pagination = require('../utils/pagination');
-const { formatUrl } = require('../utils/url-utils');
-const { authenticate } = require('../core/authentication/auth.service');
+const Pagination = require('../../../utils/pagination');
+
+const router = require('express').Router({ mergeParams: true });
+const service = require('./transaction.service');
+const responseUtils = require('../../../utils/response-utils');
+const { formatUrl } = require('../../../utils/url-utils');
+const { authenticate } = require('../../../core/authentication/auth.service');
 
 const toRepresentation = entity => {
   return {
     id: entity.id,
-    nome: entity.nome
+    nome: entity.nome,
+    valor: entity.valor,
+    conta: entity.conta
   };
 };
-
-router.use('/:contaId/lancamentos', require('./lancamento.resource'));
 
 router.get('', authenticate(), async function(req, res, next) {
   try {
     const filter = {
       usuario: req.user.id,
+      conta: req.params.contaId,
       nome: new RegExp(req.query.nome, 'i')
     };
 
@@ -55,14 +57,20 @@ router.post('', authenticate(), async function(req, res, next) {
   try {
     const payload = {
       nome: req.body.nome,
+      valor: req.body.valor,
+      conta: req.params.contaId,
       usuario: req.user.id
     };
 
-    const entity = await service.create(payload);
+    const createdEntity = await service.create(payload);
 
     const response = responseUtils.createdResponse(
-      toRepresentation(entity),
-      formatUrl(req.protocol, req.hostname, `/contas/${entity.id}`)
+      toRepresentation(createdEntity),
+      formatUrl(
+        req.protocol,
+        req.hostname,
+        `contas/${req.params.contaId}/lancamentos/${createdEntity.id}`
+      )
     );
 
     res.status(CREATED).send(response);

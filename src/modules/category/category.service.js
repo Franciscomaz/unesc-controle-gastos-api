@@ -1,7 +1,7 @@
-const EXCEPTION_TYPES = require('../core/exception/types');
+const EXCEPTION_TYPES = require('../../core/exception/types');
 
-const Etiqueta = require('../models/etiqueta');
-const ObjectIdWrapper = require('../core/database/object-id-wrapper');
+const Etiqueta = require('./category');
+const ObjectIdWrapper = require('../../core/database/object-id-wrapper');
 
 const findAll = async pagination => {
   return await Etiqueta.find(pagination.query)

@@ -1,10 +1,10 @@
-const EXCEPTION_TYPES = require('../core/exception/types');
+const EXCEPTION_TYPES = require('../../core/exception/types');
 
-const cryptService = require('../core/authentication/crypto.service');
-const authService = require('../core/authentication/auth.service');
+const cryptService = require('../../core/authentication/crypto.service');
+const authService = require('../../core/authentication/auth.service');
 
-const Usuario = require('../models/usuario');
-const ObjectIdWrapper = require('../core/database/object-id-wrapper');
+const Usuario = require('./user');
+const ObjectIdWrapper = require('../../core/database/object-id-wrapper');
 
 const findAll = async pagination => {
   return await Usuario.find(pagination.query)

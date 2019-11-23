@@ -1,11 +1,11 @@
-const { CREATED } = require('../core/http/status-codes');
+const { CREATED } = require('../../core/http/status-codes');
 
-const router = require('express').Router({ mergeParams: true });
-const service = require('../services/etiqueta.service');
-const responseUtils = require('../utils/response-utils');
-const Pagination = require('../utils/pagination');
-const { formatUrl } = require('../utils/url-utils');
-const { authenticate } = require('../core/authentication/auth.service');
+const router = require('express').Router();
+const service = require('./account.service');
+const responseUtils = require('../../utils/response-utils');
+const Pagination = require('../../utils/pagination');
+const { formatUrl } = require('../../utils/url-utils');
+const { authenticate } = require('../../core/authentication/auth.service');
 
 const toRepresentation = entity => {
   return {
@@ -13,6 +13,11 @@ const toRepresentation = entity => {
     nome: entity.nome
   };
 };
+
+router.use(
+  '/:contaId/transacoes',
+  require('./transaction/transaction.resource')
+);
 
 router.get('', authenticate(), async function(req, res, next) {
   try {
@@ -56,11 +61,11 @@ router.post('', authenticate(), async function(req, res, next) {
       usuario: req.user.id
     };
 
-    const createdEntity = await service.create(payload);
+    const entity = await service.create(payload);
 
     const response = responseUtils.createdResponse(
-      toRepresentation(createdEntity),
-      formatUrl(req.protocol, req.hostname, `${createdEntity.id}`)
+      toRepresentation(entity),
+      formatUrl(req.protocol, req.hostname, `/contas/${entity.id}`)
     );
 
     res.status(CREATED).send(response);

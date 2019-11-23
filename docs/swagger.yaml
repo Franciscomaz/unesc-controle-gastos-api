@@ -4,7 +4,7 @@ info:
   description: API para gerenciar gastos pessoais
   version: 1.0.0
 servers:
-  - url: "http://localhost:3000/api/v1"
+  - url: "http://localhost:8080/api/v1"
     description: Development server
 paths:
   /usuarios:
@@ -326,7 +326,7 @@ paths:
                 $ref: "#components/responses/DefaultError"
       tags:
         - contas
-  "/contas/{contaId}/lancamentos":
+  "/contas/{contaId}/transacoes":
     parameters:
       - in: path
         name: contaId
@@ -361,11 +361,11 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Lancamento"
+                  $ref: "#/components/schemas/Transacao"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
       tags:
-        - lancamentos
+        - transacoes
     post:
       summary: Cadastra um novo lançamento
       security:
@@ -376,14 +376,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Lancamento"
+              $ref: "#/components/schemas/Transacao"
       responses:
         "200":
-          description: Retorna o lancamento cadastrado
+          description: Retorna o transacao cadastrado
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Lancamento"
+                $ref: "#/components/schemas/Transacao"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
         "422":
@@ -393,8 +393,8 @@ paths:
               schema:
                 $ref: "#components/responses/DefaultError"
       tags:
-        - lancamentos
-  "/contas/{contaId}/lancamentos/{id}":
+        - transacoes
+  "/contas/{contaId}/transacoes/{id}":
     parameters:
       - in: path
         name: id
@@ -416,7 +416,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Lancamento"
+                $ref: "#/components/schemas/Transacao"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
         "404":
@@ -426,7 +426,7 @@ paths:
               schema:
                 $ref: "#components/responses/DefaultError"
       tags:
-        - lancamentos
+        - transacoes
     put:
       summary: Atualiza o lançamento do id informado
       security:
@@ -437,14 +437,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Lancamento"
+              $ref: "#/components/schemas/Transacao"
       responses:
         "200":
           description: Retorna o lançamento cadastrado
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Lancamento"
+                $ref: "#/components/schemas/Transacao"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
         "404":
@@ -460,7 +460,7 @@ paths:
               schema:
                 $ref: "#components/responses/DefaultError"
       tags:
-        - lancamentos
+        - transacoes
     delete:
       summary: Remove a lançamento do id informado
       security:
@@ -471,7 +471,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Lancamento"
+                $ref: "#/components/schemas/Transacao"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
         "404":
@@ -481,16 +481,16 @@ paths:
               schema:
                 $ref: "#components/responses/DefaultError"
       tags:
-        - lancamentos
-  /etiquetas:
+        - transacoes
+  /categorias:
     get:
-      summary: Retorna todas as etiquetas
+      summary: Retorna todas as categorias
       parameters:
         - in: query
           name: nome
           schema:
             type: string
-          description: Retorna as etiquetas que contém a string no nome
+          description: Retorna as categorias que contém a string no nome
         - in: query
           name: offset
           schema:
@@ -505,37 +505,37 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Lista de etiquetas
+          description: Lista de categorias
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Etiqueta"
+                  $ref: "#/components/schemas/Categoria"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
       tags:
-        - etiquetas
+        - categorias
     post:
-      summary: Cadastra uma nova etiqueta
+      summary: Cadastra uma nova categoria
       security:
         - bearerAuth: []
       requestBody:
-        description: Etiqueta a ser cadastrada
+        description: Categoria a ser cadastrada
         required: true
         content:
           application/json:
             schema:
               type: array
               items:
-                $ref: "#/components/schemas/Etiqueta"
+                $ref: "#/components/schemas/Categoria"
       responses:
         "200":
-          description: Retorna a etiqueta cadastrada
+          description: Retorna a categoria cadastrada
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Etiqueta"
+                $ref: "#/components/schemas/Categoria"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
         "422":
@@ -545,8 +545,8 @@ paths:
               schema:
                 $ref: "#components/responses/DefaultError"
       tags:
-        - etiquetas
-  "/etiquetas/{id}":
+        - categorias
+  "/categorias/{id}":
     parameters:
       - in: path
         name: id
@@ -554,48 +554,48 @@ paths:
         schema:
           type: string
     get:
-      summary: Retorna a etiqueta do id informado
+      summary: Retorna a categoria do id informado
       security:
         - bearerAuth: []
       responses:
         "200":
-          description: Etiqueta encontrada
+          description: Categoria encontrada
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Etiqueta"
+                $ref: "#/components/schemas/Categoria"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
         "404":
-          description: Etiqueta não encontrada
+          description: Categoria não encontrada
           content:
             application/json:
               schema:
                 $ref: "#components/responses/DefaultError"
       tags:
-        - etiquetas
+        - categorias
     put:
-      summary: Atualiza a etiqueta do id informado
+      summary: Atualiza a categoria do id informado
       security:
         - bearerAuth: []
       requestBody:
-        description: Etiqueta a ser atualizada
+        description: Categoria a ser atualizada
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Etiqueta"
+              $ref: "#/components/schemas/Categoria"
       responses:
         "200":
-          description: Retorna a etiqueta cadastrada
+          description: Retorna a categoria cadastrada
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Etiqueta"
+                $ref: "#/components/schemas/Categoria"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
         "404":
-          description: Etiqueta não encontrada
+          description: Categoria não encontrada
           content:
             application/json:
               schema:
@@ -607,28 +607,28 @@ paths:
               schema:
                 $ref: "#components/responses/DefaultError"
       tags:
-        - etiquetas
+        - categorias
     delete:
-      summary: Remove a etiqueta do id informado
+      summary: Remove a categoria do id informado
       security:
         - bearerAuth: []
       responses:
         "200":
-          description: Retorna a etiqueta removida
+          description: Retorna a categoria removida
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Etiqueta"
+                $ref: "#/components/schemas/Categoria"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
         "404":
-          description: Etiqueta não encontrada
+          description: Categoria não encontrada
           content:
             application/json:
               schema:
                 $ref: "#components/responses/DefaultError"
       tags:
-        - etiquetas
+        - categorias
   /authenticate:
     post:
       summary: Verifica se um token é válido
@@ -708,7 +708,7 @@ components:
         usuario: 5da268bab917a843a850531a
       required:
         - nome
-    Lancamento:
+    Transacao:
       type: object
       properties:
         id:
@@ -727,7 +727,7 @@ components:
         conta: 5da507f9f02e184328a07db2
       required:
         - nome
-    Etiqueta:
+    Categoria:
       type: object
       properties:
         id:
@@ -766,9 +766,9 @@ tags:
     description: Usuários
   - name: contas
     description: Contas
-  - name: lancamentos
+  - name: transacoes
     description: Lançamentos
-  - name: etiquetas
-    description: Etiquetas
+  - name: categorias
+    description: Categorias
   - name: authorization
     description: Autorização
