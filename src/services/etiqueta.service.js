@@ -19,7 +19,7 @@ const findById = async objectId => {
     // TODO: Refatorar para utilizar objeto de erro nativo do javascript
     throw {
       type: EXCEPTION_TYPES.NOT_FOUND,
-      message: `Etiqueta não encontrada para o id: ${objectIdWrapper.get()}`
+      message: 'Etiqueta não encontrada'
     };
   }
 

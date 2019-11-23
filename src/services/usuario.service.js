@@ -22,7 +22,7 @@ const findById = async objectId => {
     // TODO: Refatorar para utilizar objeto de erro nativo do javascript
     throw {
       type: EXCEPTION_TYPES.NOT_FOUND,
-      message: `Usuário não encontrado para o id: ${objectIdWrapper.get()}`
+      message: 'Usuário não encontrado'
     };
   }
 
@@ -36,7 +36,7 @@ const findByName = async username => {
     // TODO: Refatorar para utilizar objeto de erro nativo do javascript
     throw {
       type: EXCEPTION_TYPES.NOT_FOUND,
-      message: `Usuário ${username} não encontrado`
+      message: 'Usuário não encontrado'
     };
   }
 
