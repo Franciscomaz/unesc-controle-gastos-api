@@ -1,11 +1,13 @@
 const { CREATED } = require('../../core/http/status-codes');
 
 const router = require('express').Router();
+
 const service = require('./account.service');
-const responseUtils = require('../../utils/response-utils');
+const { authenticate } = require('../../core/authentication/auth.service');
+
 const Pagination = require('../../utils/pagination');
 const { formatUrl } = require('../../utils/url-utils');
-const { authenticate } = require('../../core/authentication/auth.service');
+const responseUtils = require('../../utils/response-utils');
 
 router.use(
   '/:contaId/transacoes',

@@ -1,10 +1,12 @@
 const { CREATED } = require('../../core/http/status-codes');
 
 const router = require('express').Router();
+
 const service = require('./user.service');
-const responseUtils = require('../../utils/response-utils');
+
 const Pagination = require('../../utils/pagination');
 const { formatUrl } = require('../../utils/url-utils');
+const responseUtils = require('../../utils/response-utils');
 
 router.get('', async function(req, res, next) {
   try {

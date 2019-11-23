@@ -1,11 +1,13 @@
 const { CREATED } = require('../../core/http/status-codes');
 
 const router = require('express').Router({ mergeParams: true });
+
 const service = require('./category.service');
-const responseUtils = require('../../utils/response-utils');
+const { authenticate } = require('../../core/authentication/auth.service');
+
 const Pagination = require('../../utils/pagination');
 const { formatUrl } = require('../../utils/url-utils');
-const { authenticate } = require('../../core/authentication/auth.service');
+const responseUtils = require('../../utils/response-utils');
 
 router.get('', authenticate(), async function(req, res, next) {
   try {
