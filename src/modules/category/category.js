@@ -1,20 +1,22 @@
 const Mongoose = require('mongoose');
 
-const etiquetaSchema = new Mongoose.Schema(
+const categorySchema = new Mongoose.Schema(
   {
     nome: {
       type: String,
       required: [true, 'É necessário informar o nome'],
+      maxlength: [64, 'Não é permitido nomes com mais de 64 caracteres'],
       validate: {
         validator: nome => {
-          return Mongoose.model('etiquetas')
+          return Mongoose.model('categorias')
             .exists({
               nome: nome
             })
             .then(alreadyExists => !alreadyExists);
         },
-        message: props => `A etiqueta ${props.value} já existe`
-      }
+        message: props => `A categoria ${props.value} já existe`
+      },
+      trim: true
     },
     usuario: {
       type: Mongoose.Schema.Types.ObjectId,
@@ -25,4 +27,4 @@ const etiquetaSchema = new Mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = Mongoose.model('etiquetas', etiquetaSchema);
+module.exports = Mongoose.model('categorias', categorySchema);

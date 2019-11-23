@@ -8,15 +8,6 @@ const responseUtils = require('../../../utils/response-utils');
 const { formatUrl } = require('../../../utils/url-utils');
 const { authenticate } = require('../../../core/authentication/auth.service');
 
-const toRepresentation = entity => {
-  return {
-    id: entity.id,
-    nome: entity.nome,
-    valor: entity.valor,
-    conta: entity.conta
-  };
-};
-
 router.get('', authenticate(), async function(req, res, next) {
   try {
     const filter = {
@@ -58,6 +49,8 @@ router.post('', authenticate(), async function(req, res, next) {
     const payload = {
       nome: req.body.nome,
       valor: req.body.valor,
+      tipo: req.body.tipo,
+      categoria: req.body.categoriaId,
       conta: req.params.contaId,
       usuario: req.user.id
     };
@@ -69,7 +62,7 @@ router.post('', authenticate(), async function(req, res, next) {
       formatUrl(
         req.protocol,
         req.hostname,
-        `contas/${req.params.contaId}/lancamentos/${createdEntity.id}`
+        `contas/${req.params.contaId}/transacoes/${createdEntity.id}`
       )
     );
 
@@ -81,7 +74,14 @@ router.post('', authenticate(), async function(req, res, next) {
 
 router.put('/:id', authenticate(), async (req, res, next) => {
   try {
-    const updatedEntity = await service.update(req.params.id, req.body);
+    const payload = {
+      nome: req.body.nome,
+      valor: req.body.valor,
+      tipo: req.body.tipo,
+      categoria: req.body.categoriaId
+    };
+
+    const updatedEntity = await service.update(req.params.id, payload);
 
     const response = responseUtils.successResponse(
       toRepresentation(updatedEntity)
@@ -106,5 +106,16 @@ router.delete('/:id', authenticate(), async (req, res, next) => {
     next(err);
   }
 });
+
+const toRepresentation = entity => {
+  return {
+    id: entity.id,
+    nome: entity.nome,
+    valor: entity.valor,
+    tipo: entity.tipo,
+    categoria: entity.categoria,
+    conta: entity.conta
+  };
+};
 
 module.exports = router;

@@ -1,10 +1,10 @@
 const EXCEPTION_TYPES = require('../../core/exception/types');
 
-const Etiqueta = require('./category');
+const Category = require('./category');
 const ObjectIdWrapper = require('../../core/database/object-id-wrapper');
 
 const findAll = async pagination => {
-  return await Etiqueta.find(pagination.query)
+  return await Category.find(pagination.query)
     .limit(pagination.limit)
     .skip(pagination.offset)
     .exec();
@@ -13,13 +13,13 @@ const findAll = async pagination => {
 const findById = async objectId => {
   const objectIdWrapper = new ObjectIdWrapper(objectId);
 
-  const entity = await Etiqueta.findById(objectIdWrapper.get());
+  const entity = await Category.findById(objectIdWrapper.get());
 
   if (!entity) {
     // TODO: Refatorar para utilizar objeto de erro nativo do javascript
     throw {
       type: EXCEPTION_TYPES.NOT_FOUND,
-      message: 'Etiqueta não encontrada'
+      message: 'Categoria não encontrada'
     };
   }
 
@@ -27,7 +27,7 @@ const findById = async objectId => {
 };
 
 const create = async representation => {
-  return Etiqueta.create(representation);
+  return Category.create(representation);
 };
 
 const update = async (id, representation) => {
@@ -40,7 +40,7 @@ const update = async (id, representation) => {
 
 const remove = async id => {
   const toBeRemovedEntity = await findById(id);
-  await Etiqueta.findByIdAndRemove(toBeRemovedEntity.id);
+  await Category.findByIdAndRemove(toBeRemovedEntity.id);
   return toBeRemovedEntity;
 };
 

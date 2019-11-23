@@ -1,16 +1,20 @@
 const Mongoose = require('mongoose');
 
-const usuarioSchema = new Mongoose.Schema(
+const userSchema = new Mongoose.Schema(
   {
     nome: {
       type: String,
+      index: true,
       required: [true, 'É necessário informar o nome'],
-      index: true
+      maxlength: [64, 'Não é permitido nomes com mais de 64 caracteres'],
+      trim: true
     },
     username: {
       type: String,
-      required: [true, 'É necessário informar o usuário'],
       index: true,
+      required: [true, 'É necessário informar o usuário'],
+      minlength: [4, 'O usuário precisa ter pelo menos 4 caracteres'],
+      maxlength: [64, 'Não é permitido usuários com mais de 64 caracteres'],
       validate: {
         validator: username => {
           return Mongoose.model('usuarios')
@@ -20,7 +24,8 @@ const usuarioSchema = new Mongoose.Schema(
             .then(isUsernameInUse => !isUsernameInUse);
         },
         message: props => `O usuário ${props.value} já existe`
-      }
+      },
+      trim: true
     },
     senha: {
       type: String,
@@ -31,4 +36,4 @@ const usuarioSchema = new Mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = Mongoose.model('usuarios', usuarioSchema);
+module.exports = Mongoose.model('usuarios', userSchema);

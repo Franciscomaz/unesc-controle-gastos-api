@@ -6,14 +6,6 @@ const responseUtils = require('../../utils/response-utils');
 const Pagination = require('../../utils/pagination');
 const { formatUrl } = require('../../utils/url-utils');
 
-const toRepresentation = entity => {
-  return {
-    id: entity.id,
-    nome: entity.nome,
-    username: entity.username
-  };
-};
-
 router.get('', async function(req, res, next) {
   try {
     const filter = {
@@ -100,5 +92,13 @@ router.delete('/:id', async (req, res, next) => {
     next(err);
   }
 });
+
+const toRepresentation = entity => {
+  return {
+    id: entity.id,
+    nome: entity.nome,
+    username: entity.username
+  };
+};
 
 module.exports = router;

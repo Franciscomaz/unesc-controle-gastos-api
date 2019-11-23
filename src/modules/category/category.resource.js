@@ -7,13 +7,6 @@ const Pagination = require('../../utils/pagination');
 const { formatUrl } = require('../../utils/url-utils');
 const { authenticate } = require('../../core/authentication/auth.service');
 
-const toRepresentation = entity => {
-  return {
-    id: entity.id,
-    nome: entity.nome
-  };
-};
-
 router.get('', authenticate(), async function(req, res, next) {
   try {
     const filter = {
@@ -60,7 +53,7 @@ router.post('', authenticate(), async function(req, res, next) {
 
     const response = responseUtils.createdResponse(
       toRepresentation(createdEntity),
-      formatUrl(req.protocol, req.hostname, `${createdEntity.id}`)
+      formatUrl(req.protocol, req.hostname, `categorias/${createdEntity.id}`)
     );
 
     res.status(CREATED).send(response);
@@ -71,7 +64,11 @@ router.post('', authenticate(), async function(req, res, next) {
 
 router.put('/:id', authenticate(), async (req, res, next) => {
   try {
-    const updatedEntity = await service.update(req.params.id, req.body);
+    const payload = {
+      nome: req.body.nome
+    };
+
+    const updatedEntity = await service.update(req.params.id, payload);
 
     const response = responseUtils.successResponse(
       toRepresentation(updatedEntity)
@@ -96,5 +93,12 @@ router.delete('/:id', authenticate(), async (req, res, next) => {
     next(err);
   }
 });
+
+const toRepresentation = entity => {
+  return {
+    id: entity.id,
+    nome: entity.nome
+  };
+};
 
 module.exports = router;

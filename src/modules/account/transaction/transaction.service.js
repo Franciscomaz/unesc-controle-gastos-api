@@ -1,10 +1,10 @@
 const EXCEPTION_TYPES = require('../../../core/exception/types');
 
-const Lancamento = require('./transaction');
+const Transaction = require('./transaction');
 const ObjectIdWrapper = require('../../../core/database/object-id-wrapper');
 
 const findAll = async pagination => {
-  return await Lancamento.find(pagination.query)
+  return await Transaction.find(pagination.query)
     .limit(pagination.limit)
     .skip(pagination.offset)
     .exec();
@@ -13,13 +13,13 @@ const findAll = async pagination => {
 const findById = async objectId => {
   const objectIdWrapper = new ObjectIdWrapper(objectId);
 
-  const entity = await Lancamento.findById(objectIdWrapper.get());
+  const entity = await Transaction.findById(objectIdWrapper.get());
 
   if (!entity) {
     // TODO: Refatorar para utilizar objeto de erro nativo do javascript
     throw {
       type: EXCEPTION_TYPES.NOT_FOUND,
-      message: 'Lançamento não encontrado'
+      message: 'Transação não encontrada'
     };
   }
 
@@ -27,7 +27,7 @@ const findById = async objectId => {
 };
 
 const create = async representation => {
-  return Lancamento.create(representation);
+  return Transaction.create(representation);
 };
 
 const update = async (id, representation) => {
@@ -40,7 +40,7 @@ const update = async (id, representation) => {
 
 const remove = async id => {
   const toBeRemovedEntity = await findById(id);
-  await Lancamento.findByIdAndRemove(toBeRemovedEntity.id);
+  await Transaction.findByIdAndRemove(toBeRemovedEntity.id);
   return toBeRemovedEntity;
 };
 

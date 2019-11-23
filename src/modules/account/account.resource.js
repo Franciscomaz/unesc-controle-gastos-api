@@ -7,13 +7,6 @@ const Pagination = require('../../utils/pagination');
 const { formatUrl } = require('../../utils/url-utils');
 const { authenticate } = require('../../core/authentication/auth.service');
 
-const toRepresentation = entity => {
-  return {
-    id: entity.id,
-    nome: entity.nome
-  };
-};
-
 router.use(
   '/:contaId/transacoes',
   require('./transaction/transaction.resource')
@@ -76,7 +69,11 @@ router.post('', authenticate(), async function(req, res, next) {
 
 router.put('/:id', authenticate(), async (req, res, next) => {
   try {
-    const updatedEntity = await service.update(req.params.id, req.body);
+    const payload = {
+      nome: req.body.nome
+    };
+
+    const updatedEntity = await service.update(req.params.id, payload);
 
     const response = responseUtils.successResponse(
       toRepresentation(updatedEntity)
@@ -101,5 +98,12 @@ router.delete('/:id', authenticate(), async (req, res, next) => {
     next(err);
   }
 });
+
+const toRepresentation = entity => {
+  return {
+    id: entity.id,
+    nome: entity.nome
+  };
+};
 
 module.exports = router;
