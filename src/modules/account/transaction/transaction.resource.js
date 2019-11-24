@@ -3,6 +3,7 @@ const { CREATED } = require('../../../core/http/status-codes');
 const router = require('express').Router({ mergeParams: true });
 
 const service = require('./transaction.service');
+const { fromEntity } = require('./transaction-representation.factory');
 const { authenticate } = require('../../../core/authentication/auth.service');
 
 const Pagination = require('../../../utils/pagination');
@@ -22,7 +23,7 @@ router.get('', authenticate(), async function(req, res, next) {
     );
 
     const response = responseUtils.successResponse(
-      entities.map(entity => toRepresentation(entity))
+      entities.map(entity => fromEntity(entity))
     );
 
     res.send(response);
@@ -35,9 +36,7 @@ router.get('/:id', authenticate(), async function(req, res, next) {
   try {
     const foundEntity = await service.findById(req.params.id);
 
-    const response = responseUtils.successResponse(
-      toRepresentation(foundEntity)
-    );
+    const response = responseUtils.successResponse(fromEntity(foundEntity));
 
     res.send(response);
   } catch (err) {
@@ -59,7 +58,7 @@ router.post('', authenticate(), async function(req, res, next) {
     const createdEntity = await service.create(payload);
 
     const response = responseUtils.createdResponse(
-      toRepresentation(createdEntity),
+      fromEntity(createdEntity),
       formatUrl(
         req.protocol,
         req.hostname,
@@ -84,9 +83,7 @@ router.put('/:id', authenticate(), async (req, res, next) => {
 
     const updatedEntity = await service.update(req.params.id, payload);
 
-    const response = responseUtils.successResponse(
-      toRepresentation(updatedEntity)
-    );
+    const response = responseUtils.successResponse(fromEntity(updatedEntity));
 
     res.send(response);
   } catch (err) {
@@ -98,25 +95,12 @@ router.delete('/:id', authenticate(), async (req, res, next) => {
   try {
     const removedEntity = await service.remove(req.params.id);
 
-    const response = responseUtils.successResponse(
-      toRepresentation(removedEntity)
-    );
+    const response = responseUtils.successResponse(fromEntity(removedEntity));
 
     res.send(response);
   } catch (err) {
     next(err);
   }
 });
-
-const toRepresentation = entity => {
-  return {
-    id: entity.id,
-    nome: entity.nome,
-    valor: entity.valor,
-    tipo: entity.tipo,
-    categoria: entity.categoria,
-    conta: entity.conta
-  };
-};
 
 module.exports = router;

@@ -3,7 +3,9 @@ const { CREATED } = require('../../core/http/status-codes');
 const router = require('express').Router();
 
 const service = require('./account.service');
+const transactionService = require('./transaction/transaction.service');
 const { authenticate } = require('../../core/authentication/auth.service');
+const transactionRepresentationFactory = require('./transaction/transaction-representation.factory');
 
 const Pagination = require('../../utils/pagination');
 const { formatUrl } = require('../../utils/url-utils');
@@ -27,6 +29,29 @@ router.get('', authenticate(), async function(req, res, next) {
 
     const response = responseUtils.successResponse(
       entities.map(entity => toRepresentation(entity))
+    );
+
+    res.send(response);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/transacoes', authenticate(), async function(req, res, next) {
+  try {
+    const filter = {
+      usuario: req.user.id,
+      nome: new RegExp(req.query.nome, 'i')
+    };
+
+    const entities = await transactionService.findAll(
+      new Pagination(filter, req.query.limit, req.query.offset)
+    );
+
+    const response = responseUtils.successResponse(
+      entities.map(entity =>
+        transactionRepresentationFactory.fromEntity(entity)
+      )
     );
 
     res.send(response);

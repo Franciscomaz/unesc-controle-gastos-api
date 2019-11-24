@@ -326,6 +326,24 @@ paths:
                 $ref: "#components/responses/DefaultError"
       tags:
         - contas
+  "/contas/transacoes":
+    get:
+      summary: Retorna todas as transações de todas as contas
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Lista de transações
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Transacao"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+      tags:
+        - transacoes
   "/contas/{contaId}/transacoes":
     parameters:
       - in: path
@@ -334,13 +352,13 @@ paths:
         schema:
           type: string
     get:
-      summary: Retorna todos os lançamentos
+      summary: Retorna todas as transações de uma conta
       parameters:
         - in: query
           name: nome
           schema:
             type: string
-          description: Retorna os lançamentos que contém a string no nome
+          description: Retorna as transações que contém a string no nome
         - in: query
           name: offset
           schema:
@@ -355,7 +373,7 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Lista de lançamentos
+          description: Lista de transações
           content:
             application/json:
               schema:
@@ -367,7 +385,7 @@ paths:
       tags:
         - transacoes
     post:
-      summary: Cadastra um novo lançamento
+      summary: Cadastra uma nova transação
       security:
         - bearerAuth: []
       requestBody:
@@ -379,7 +397,7 @@ paths:
               $ref: "#/components/schemas/Transacao"
       responses:
         "200":
-          description: Retorna o transacao cadastrado
+          description: Retorna a transacao cadastrada
           content:
             application/json:
               schema:
@@ -407,12 +425,12 @@ paths:
         schema:
           type: string
     get:
-      summary: Retorna o lançamento do id informado
+      summary: Retorna a transação do id informado
       security:
         - bearerAuth: []
       responses:
         "200":
-          description: Transação encontrado
+          description: Transação encontrada
           content:
             application/json:
               schema:
@@ -420,7 +438,7 @@ paths:
         "401":
           $ref: "#/components/responses/UnauthorizedError"
         "404":
-          description: Transação não encontrado
+          description: Transação não encontrada
           content:
             application/json:
               schema:
@@ -428,7 +446,7 @@ paths:
       tags:
         - transacoes
     put:
-      summary: Atualiza o lançamento do id informado
+      summary: Atualiza a transação do id informado
       security:
         - bearerAuth: []
       requestBody:
@@ -440,7 +458,7 @@ paths:
               $ref: "#/components/schemas/Transacao"
       responses:
         "200":
-          description: Retorna o lançamento cadastrado
+          description: Retorna a transação cadastrada
           content:
             application/json:
               schema:
@@ -448,7 +466,7 @@ paths:
         "401":
           $ref: "#/components/responses/UnauthorizedError"
         "404":
-          description: Transação não encontrado
+          description: Transação não encontrada
           content:
             application/json:
               schema:
@@ -462,12 +480,12 @@ paths:
       tags:
         - transacoes
     delete:
-      summary: Remove a lançamento do id informado
+      summary: Remove a transação do id informado
       security:
         - bearerAuth: []
       responses:
         "200":
-          description: Retorna o lançamento removida
+          description: Retorna o transação removida
           content:
             application/json:
               schema:
@@ -475,7 +493,7 @@ paths:
         "401":
           $ref: "#/components/responses/UnauthorizedError"
         "404":
-          description: Transação não encontrado
+          description: Transação não encontrada
           content:
             application/json:
               schema:
