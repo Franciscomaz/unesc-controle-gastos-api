@@ -7,7 +7,8 @@ const transactionService = require('./transaction/transaction.service');
 const { authenticate } = require('../../core/authentication/auth.service');
 const transactionRepresentationFactory = require('./transaction/transaction-representation.factory');
 
-const Pagination = require('../../utils/pagination');
+const Pagination = require('../../core/data/pagination');
+const PageRepresentation = require('../../core/data/page-representation');
 const { formatUrl } = require('../../utils/url-utils');
 const responseUtils = require('../../utils/response-utils');
 
@@ -23,12 +24,12 @@ router.get('', authenticate(), async function(req, res, next) {
       nome: new RegExp(req.query.nome, 'i')
     };
 
-    const entities = await service.findAll(
+    const page = await service.findAll(
       new Pagination(filter, req.query.limit, req.query.offset)
     );
 
     const response = responseUtils.successResponse(
-      entities.map(entity => toRepresentation(entity))
+      PageRepresentation.fromPage(page, toRepresentation)
     );
 
     res.send(response);
@@ -44,13 +45,14 @@ router.get('/transacoes', authenticate(), async function(req, res, next) {
       nome: new RegExp(req.query.nome, 'i')
     };
 
-    const entities = await transactionService.findAll(
+    const page = await transactionService.findAll(
       new Pagination(filter, req.query.limit, req.query.offset)
     );
 
     const response = responseUtils.successResponse(
-      entities.map(entity =>
-        transactionRepresentationFactory.fromEntity(entity)
+      PageRepresentation.fromPage(
+        page,
+        transactionRepresentationFactory.fromEntity
       )
     );
 

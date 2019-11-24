@@ -4,13 +4,18 @@ const cryptService = require('../../core/authentication/crypto.service');
 const authService = require('../../core/authentication/auth.service');
 
 const User = require('./user');
+const Page = require('../../core/data/page');
 const ObjectIdWrapper = require('../../core/database/object-id-wrapper');
 
 const findAll = async pagination => {
-  return await User.find(pagination.query)
+  const total = await User.countDocuments(pagination.query);
+
+  const content = await User.find(pagination.query)
     .limit(pagination.limit)
     .skip(pagination.offset)
     .exec();
+
+  return new Page(content, pagination, total);
 };
 
 const findById = async objectId => {

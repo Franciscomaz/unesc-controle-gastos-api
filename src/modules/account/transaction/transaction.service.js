@@ -1,13 +1,20 @@
 const EXCEPTION_TYPES = require('../../../core/exception/types');
 
 const Transaction = require('./transaction');
+const Page = require('../../../core/data/page');
 const ObjectIdWrapper = require('../../../core/database/object-id-wrapper');
 
 const findAll = async pagination => {
-  return await Transaction.find(pagination.query)
+  const total = await Transaction.countDocuments(pagination.query);
+
+  const content = await Transaction.find(pagination.query)
+    .populate('conta')
+    .populate('categoria')
     .limit(pagination.limit)
     .skip(pagination.offset)
     .exec();
+
+  return new Page(content, pagination, total);
 };
 
 const findById = async objectId => {

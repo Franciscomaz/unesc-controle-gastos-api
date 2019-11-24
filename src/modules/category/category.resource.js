@@ -5,7 +5,8 @@ const router = require('express').Router({ mergeParams: true });
 const service = require('./category.service');
 const { authenticate } = require('../../core/authentication/auth.service');
 
-const Pagination = require('../../utils/pagination');
+const Pagination = require('../../core/data/pagination');
+const PageRepresentation = require('../../core/data/page-representation');
 const { formatUrl } = require('../../utils/url-utils');
 const responseUtils = require('../../utils/response-utils');
 
@@ -16,12 +17,12 @@ router.get('', authenticate(), async function(req, res, next) {
       nome: new RegExp(req.query.nome, 'i')
     };
 
-    const entities = await service.findAll(
+    const page = await service.findAll(
       new Pagination(filter, req.query.limit, req.query.offset)
     );
 
     const response = responseUtils.successResponse(
-      entities.map(entity => toRepresentation(entity))
+      PageRepresentation.fromPage(page, toRepresentation)
     );
 
     res.send(response);

@@ -1,13 +1,18 @@
 const EXCEPTION_TYPES = require('../../core/exception/types');
 
 const Category = require('./category');
+const Page = require('../../core/data/page');
 const ObjectIdWrapper = require('../../core/database/object-id-wrapper');
 
 const findAll = async pagination => {
-  return await Category.find(pagination.query)
+  const total = await Category.countDocuments(pagination.query);
+
+  const content = await Category.find(pagination.query)
     .limit(pagination.limit)
     .skip(pagination.offset)
     .exec();
+
+  return new Page(content, pagination, total);
 };
 
 const findById = async objectId => {
