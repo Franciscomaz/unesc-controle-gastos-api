@@ -4,12 +4,13 @@ const Account = require('./account');
 const Page = require('../../core/data/page');
 const ObjectIdWrapper = require('../../core/database/object-id-wrapper');
 
-const findAll = async pagination => {
+const findAll = async (pagination, sort) => {
   const total = await Account.countDocuments(pagination.query);
 
   const content = await Account.find(pagination.query)
     .limit(pagination.limit)
     .skip(pagination.offset)
+    .sort({ [sort.field]: sort.direction() })
     .exec();
 
   return new Page(content, pagination, total);

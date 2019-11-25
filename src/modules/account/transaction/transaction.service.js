@@ -4,14 +4,17 @@ const Transaction = require('./transaction');
 const Page = require('../../../core/data/page');
 const ObjectIdWrapper = require('../../../core/database/object-id-wrapper');
 
-const findAll = async pagination => {
+const findAll = async (pagination, sort) => {
   const total = await Transaction.countDocuments(pagination.query);
+
+  console.log({ [sort.field]: sort.direction() });
 
   const content = await Transaction.find(pagination.query)
     .populate('conta')
     .populate('categoria')
     .limit(pagination.limit)
     .skip(pagination.offset)
+    .sort({ [sort.field]: sort.direction() })
     .exec();
 
   return new Page(content, pagination, total);
@@ -54,6 +57,8 @@ const remove = async id => {
 const updateAttributes = (entity, representation) => {
   entity.nome = representation.nome;
   entity.valor = representation.valor;
+  entity.categoria = representation.categoria;
+  entity.tipo = representation.tipo;
   return entity;
 };
 

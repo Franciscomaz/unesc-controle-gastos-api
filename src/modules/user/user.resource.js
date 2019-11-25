@@ -4,6 +4,7 @@ const router = require('express').Router();
 
 const service = require('./user.service');
 
+const Sort = require('../../core/data/sort');
 const Pagination = require('../../core/data/pagination');
 const PageRepresentation = require('../../core/data/page-representation');
 const { formatUrl } = require('../../utils/url-utils');
@@ -16,7 +17,8 @@ router.get('', async function(req, res, next) {
     };
 
     const page = await service.findAll(
-      new Pagination(filter, req.query.limit, req.query.offset)
+      new Pagination(filter, req.query.limit, req.query.offset),
+      new Sort(req.query.sortField, req.query.sortOrder)
     );
 
     const response = responseUtils.successResponse(

@@ -7,6 +7,7 @@ const transactionService = require('./transaction/transaction.service');
 const { authenticate } = require('../../core/authentication/auth.service');
 const transactionRepresentationFactory = require('./transaction/transaction-representation.factory');
 
+const Sort = require('../../core/data/sort');
 const Pagination = require('../../core/data/pagination');
 const PageRepresentation = require('../../core/data/page-representation');
 const { formatUrl } = require('../../utils/url-utils');
@@ -25,7 +26,8 @@ router.get('', authenticate(), async function(req, res, next) {
     };
 
     const page = await service.findAll(
-      new Pagination(filter, req.query.limit, req.query.offset)
+      new Pagination(filter, req.query.limit, req.query.offset),
+      new Sort(req.query.sortField, req.query.sortOrder)
     );
 
     const response = responseUtils.successResponse(
@@ -46,7 +48,8 @@ router.get('/transacoes', authenticate(), async function(req, res, next) {
     };
 
     const page = await transactionService.findAll(
-      new Pagination(filter, req.query.limit, req.query.offset)
+      new Pagination(filter, req.query.limit, req.query.offset),
+      new Sort(req.query.sortField, req.query.sortOrder)
     );
 
     const response = responseUtils.successResponse(

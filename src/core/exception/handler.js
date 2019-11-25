@@ -63,7 +63,7 @@ const createHttpError = (status, message) => {
 };
 
 module.exports = {
-  handleError: error => {
+  handle: error => {
     logError(error);
     return handleError(error);
   }

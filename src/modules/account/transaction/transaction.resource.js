@@ -6,6 +6,7 @@ const service = require('./transaction.service');
 const { fromEntity } = require('./transaction-representation.factory');
 const { authenticate } = require('../../../core/authentication/auth.service');
 
+const Sort = require('../../../core/data/sort');
 const Pagination = require('../../../core/data/pagination');
 const PageRepresentation = require('../../../core/data/page-representation');
 const { formatUrl } = require('../../../utils/url-utils');
@@ -20,7 +21,8 @@ router.get('', authenticate(), async function(req, res, next) {
     };
 
     const page = await service.findAll(
-      new Pagination(filter, req.query.limit, req.query.offset)
+      new Pagination(filter, req.query.limit, req.query.offset),
+      new Sort(req.query.sortField, req.query.sortOrder)
     );
 
     const response = responseUtils.successResponse(

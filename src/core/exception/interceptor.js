@@ -2,7 +2,7 @@ const errorHandler = require('./handler');
 const { errorResponse } = require('../../utils/response-utils');
 
 module.exports = (err, req, res, next) => {
-  const error = errorHandler.handleError(err);
+  const error = errorHandler.handle(err);
 
   if (!error.isAMappedApplicationError) {
     next(err);
