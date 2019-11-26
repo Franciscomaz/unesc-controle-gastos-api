@@ -16,7 +16,8 @@ module.exports = {
             id: entity.conta.id,
             nome: entity.conta.nome
           }
-        : null
+        : null,
+      createdAt: entity.createdAt
     };
   }
 };

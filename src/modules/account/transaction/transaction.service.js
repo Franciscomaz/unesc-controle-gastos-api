@@ -2,12 +2,12 @@ const EXCEPTION_TYPES = require('../../../core/exception/types');
 
 const Transaction = require('./transaction');
 const Page = require('../../../core/data/page');
+
+const ObjectId = require('mongoose').Types.ObjectId;
 const ObjectIdWrapper = require('../../../core/database/object-id-wrapper');
 
 const findAll = async (pagination, sort) => {
   const total = await Transaction.countDocuments(pagination.query);
-
-  console.log({ [sort.field]: sort.direction() });
 
   const content = await Transaction.find(pagination.query)
     .populate('conta')
@@ -18,6 +18,32 @@ const findAll = async (pagination, sort) => {
     .exec();
 
   return new Page(content, pagination, total);
+};
+
+const getTransactionsSummary = async userId => {
+  const summary = await Transaction.aggregate([
+    { $match: { usuario: new ObjectId(userId) } },
+    {
+      $project: {
+        ganhos: { $cond: [{ $eq: ['$tipo', 'Ganho'] }, '$valor', 0] },
+        despesas: { $cond: [{ $eq: ['$tipo', 'Despesa'] }, '$valor', 0] }
+      }
+    },
+    {
+      $group: {
+        _id: null,
+        ganhos: { $sum: '$ganhos' },
+        despesas: { $sum: '$despesas' }
+      }
+    },
+    {
+      $addFields: {
+        saldo: { $subtract: ['$ganhos', '$despesas'] }
+      }
+    }
+  ]).exec();
+
+  return summary.length ? summary[0] : summary;
 };
 
 const findById = async objectId => {
@@ -65,6 +91,7 @@ const updateAttributes = (entity, representation) => {
 module.exports = {
   findAll: findAll,
   findById: findById,
+  getTransactionsSummary: getTransactionsSummary,
   create: create,
   update: update,
   remove: remove
