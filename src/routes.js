@@ -10,6 +10,7 @@ router.use('/dashboards', require('./modules/dashboard/dashboard.resource'));
 router.use('/usuarios', require('./modules/user/user.resource'));
 router.use('/contas', require('./modules/account/account.resource'));
 router.use('/categorias', require('./modules/category/category.resource'));
+router.use('/orcamentos', require('./modules/budget/budget.resource'));
 router.use('/authenticate', require('./core/authentication/auth.resource'));
 
 module.exports = router;
